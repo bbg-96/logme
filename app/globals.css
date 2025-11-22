@@ -3,6 +3,7 @@
 @theme inline {
   --color-background: theme(colors.slate.50);
   --color-foreground: theme(colors.slate.900);
+  --color-primary: theme(colors.indigo.500);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
