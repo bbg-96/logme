@@ -1,24 +1,29 @@
-import Link from "next/link";
+"use client";
 
-export default function UserJournalPage({ params }: { params: { username: string } }) {
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
+export default function UserJournalPage() {
+  const { username } = useParams<{ username: string }>();
+
   return (
     <div className="space-y-6">
       <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Journal</p>
-            <h1 className="text-2xl font-semibold text-slate-900">{params.username}&apos;s work log</h1>
+            <h1 className="text-2xl font-semibold text-slate-900">{username}&apos;s work log</h1>
           </div>
           <Link
-            href={`/u/${params.username}/today`}
+            href={`/u/${username}/today`}
             className="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white"
           >
             Back to Today
           </Link>
         </div>
         <p className="mt-3 text-sm text-slate-600">
-          This space is isolated for <span className="font-semibold text-slate-900">{params.username}</span>. Other users cannot view or
-          edit these entries.
+          This space is isolated for <span className="font-semibold text-slate-900">{username}</span>. Other users cannot view or edit
+          these entries.
         </p>
       </section>
 
