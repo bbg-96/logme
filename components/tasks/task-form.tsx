@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Priority } from "@/lib/types";
+import { DateField } from "../common/date-field";
 
 interface Props {
   onCreate: (input: {
@@ -61,17 +62,7 @@ export function TaskForm({ onCreate }: Props) {
           />
         </label>
 
-        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
-          Due date
-          <input
-            required
-            type="date"
-            min={today}
-            value={dueDate}
-            onChange={(event) => setDueDate(event.target.value)}
-            className="input-field"
-          />
-        </label>
+        <DateField label="Due date" value={dueDate} onChange={setDueDate} min={today} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
