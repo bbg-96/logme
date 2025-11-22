@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { parseLocalDateString, toLocalDateString } from "@/lib/date";
 import { Priority, Task } from "@/lib/types";
 
 const priorityRank: Record<Priority, number> = {
@@ -19,7 +20,15 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
   const [sortBy, setSortBy] = useState<"priority" | "dueDate" | "createdAt">("priority");
   const [filter, setFilter] = useState<"all" | "high" | "today" | "incomplete">("all");
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = toLocalDateString(new Date());
+
+  const normalizeCreatedAt = useCallback((value: Task["createdAt"]) => {
+    if (typeof value === "number") return value;
+    const numeric = Number(value);
+    if (Number.isFinite(numeric)) return numeric;
+    const parsed = Date.parse(value);
+    return Number.isNaN(parsed) ? 0 : parsed;
+  }, []);
 
   const filteredTasks = useMemo(() => {
     const list = tasks.filter((task) => {
@@ -34,9 +43,9 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
         return priorityRank[a.priority] - priorityRank[b.priority];
       }
       if (sortBy === "dueDate") return a.dueDate.localeCompare(b.dueDate);
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      return normalizeCreatedAt(a.createdAt) - normalizeCreatedAt(b.createdAt);
     });
-  }, [filter, sortBy, tasks, today]);
+  }, [filter, normalizeCreatedAt, sortBy, tasks, today]);
 
   const filterTabClass = (key: string) =>
     `tab-button ${filter === key ? "is-active shadow-[0_10px_24px_var(--color-shadow-soft)]" : "hover:shadow-sm"}`;
@@ -44,9 +53,9 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
   return (
     <div className="card-surface space-y-4 p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+        <div className="space-y-1">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Tasks</h2>
-          <p className="text-sm text-[var(--color-text-muted)]">Sort, filter, and manage your personal to-dos.</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Overview</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -112,7 +121,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-muted)]">
                     <PriorityBadge priority={task.priority} />
                     <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-bg-subtle)] px-2 py-1">
-                      Due {new Date(task.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      Due {parseLocalDateString(task.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                     </span>
                     {task.completed && <span className="text-emerald-500">Completed</span>}
                   </div>

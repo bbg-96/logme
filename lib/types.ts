@@ -7,7 +7,7 @@ export interface Task {
   priority: Priority;
   notes?: string;
   completed: boolean;
-  createdAt: string;
+  createdAt: number | string;
 }
 
 export interface ScheduleItem {
@@ -16,5 +16,5 @@ export interface ScheduleItem {
   date: string;
   time: string;
   notes?: string;
-  createdAt: string;
+  createdAt: number | string;
 }

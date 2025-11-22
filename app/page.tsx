@@ -34,7 +34,7 @@ export default function HomePage() {
       {
         ...input,
         id: createId(),
-        createdAt: new Date().toISOString(),
+        createdAt: Date.now(),
         completed: false,
       },
     ]);
@@ -51,7 +51,7 @@ export default function HomePage() {
       {
         ...input,
         id: createId(),
-        createdAt: new Date().toISOString(),
+        createdAt: Date.now(),
       },
     ]);
   };

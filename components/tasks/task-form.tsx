@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { toLocalDateString } from "@/lib/date";
 import { Priority } from "@/lib/types";
 import { DateField } from "../common/date-field";
 
@@ -14,7 +15,7 @@ interface Props {
 }
 
 export function TaskForm({ onCreate }: Props) {
-  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const today = useMemo(() => toLocalDateString(new Date()), []);
   const [title, setTitle] = useState("");
   const [dueDate, setDueDate] = useState(today);
   const [priority, setPriority] = useState<Priority>("medium");
@@ -41,9 +42,9 @@ export function TaskForm({ onCreate }: Props) {
       aria-label="Create a new task"
     >
       <div className="flex items-center justify-between gap-3">
-        <div>
+        <div className="space-y-1">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Create Task</h2>
-          <p className="text-sm text-[var(--color-text-muted)]">Add your next task with due date, priority, and optional notes.</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">New item</p>
         </div>
         <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-200">
           Stay organized

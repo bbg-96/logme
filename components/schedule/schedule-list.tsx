@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { parseLocalDateString } from "@/lib/date";
 import { ScheduleItem } from "@/lib/types";
 
 interface Props {
@@ -20,9 +21,9 @@ export function ScheduleList({ schedules, onDelete }: Props) {
   return (
     <div className="card-surface space-y-4 p-5">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+        <div className="space-y-1">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Schedule</h2>
-          <p className="text-sm text-[var(--color-text-muted)]">Chronological list of your upcoming sessions.</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Upcoming</p>
         </div>
       </div>
 
@@ -41,7 +42,7 @@ export function ScheduleList({ schedules, onDelete }: Props) {
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-semibold text-[var(--color-text-muted)]">
-                  {new Date(entry.date).toLocaleDateString(undefined, {
+                  {parseLocalDateString(entry.date).toLocaleDateString(undefined, {
                     weekday: "short",
                     month: "short",
                     day: "numeric",

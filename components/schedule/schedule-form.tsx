@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { toLocalDateString } from "@/lib/date";
 import { DateField } from "../common/date-field";
 import { TimeField } from "../common/time-field";
 
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export function ScheduleForm({ onCreate }: Props) {
-  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const today = useMemo(() => toLocalDateString(new Date()), []);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(today);
   const [time, setTime] = useState("09:00");
@@ -36,9 +37,9 @@ export function ScheduleForm({ onCreate }: Props) {
       aria-label="Create a new schedule entry"
     >
       <div className="flex items-center justify-between gap-3">
-        <div>
+        <div className="space-y-1">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Add to Schedule</h2>
-          <p className="text-sm text-[var(--color-text-muted)]">Capture meetings, appointments, or time blocks.</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">New entry</p>
         </div>
         <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-100">
           Plan ahead
