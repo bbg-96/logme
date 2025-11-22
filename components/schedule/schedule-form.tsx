@@ -30,13 +30,13 @@ export function ScheduleForm({ onCreate }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="card-surface space-y-4 p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-strong)]"
+      className="card-surface space-y-4 p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-strong)]"
       aria-label="Create a new schedule entry"
     >
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-[var(--text)]">Add to Schedule</h2>
-          <p className="text-sm text-[var(--text-muted)]">Capture meetings, appointments, or time blocks.</p>
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Add to Schedule</h2>
+          <p className="text-sm text-[var(--color-text-muted)]">Capture meetings, appointments, or time blocks.</p>
         </div>
         <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-100">
           Plan ahead
@@ -44,7 +44,7 @@ export function ScheduleForm({ onCreate }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Title
           <input
             required
@@ -55,7 +55,7 @@ export function ScheduleForm({ onCreate }: Props) {
           />
         </label>
 
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Date
           <input
             required
@@ -69,7 +69,7 @@ export function ScheduleForm({ onCreate }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Time
           <input
             required
@@ -80,7 +80,7 @@ export function ScheduleForm({ onCreate }: Props) {
           />
         </label>
 
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Notes
           <textarea
             value={notes}
@@ -94,7 +94,7 @@ export function ScheduleForm({ onCreate }: Props) {
 
       <button
         type="submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition hover:bg-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--card)] disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition hover:bg-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-card)] disabled:opacity-50"
       >
         + Add Schedule
       </button>

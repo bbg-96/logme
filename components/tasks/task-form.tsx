@@ -36,13 +36,13 @@ export function TaskForm({ onCreate }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="card-surface space-y-4 p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-strong)]"
+      className="card-surface space-y-4 p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-strong)]"
       aria-label="Create a new task"
     >
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-[var(--text)]">Create Task</h2>
-          <p className="text-sm text-[var(--text-muted)]">Add your next task with due date, priority, and optional notes.</p>
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Create Task</h2>
+          <p className="text-sm text-[var(--color-text-muted)]">Add your next task with due date, priority, and optional notes.</p>
         </div>
         <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-200">
           Stay organized
@@ -50,7 +50,7 @@ export function TaskForm({ onCreate }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Title
           <input
             required
@@ -61,7 +61,7 @@ export function TaskForm({ onCreate }: Props) {
           />
         </label>
 
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Due date
           <input
             required
@@ -75,7 +75,7 @@ export function TaskForm({ onCreate }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Priority
           <select
             value={priority}
@@ -88,7 +88,7 @@ export function TaskForm({ onCreate }: Props) {
           </select>
         </label>
 
-        <label className="space-y-1 text-sm font-medium text-[var(--text)]">
+        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Notes
           <textarea
             value={notes}
@@ -102,7 +102,7 @@ export function TaskForm({ onCreate }: Props) {
 
       <button
         type="submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--card)] disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-card)] disabled:opacity-50"
         aria-label="Add task"
       >
         + Add Task

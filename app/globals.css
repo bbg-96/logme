@@ -13,36 +13,52 @@
 */
 :root {
   color-scheme: light;
-  --bg: #f9fafb;
-  --card: #ffffff;
-  --card-muted: #f3f4f6;
-  --text: #1f2937;
-  --text-muted: #6b7280;
-  --muted: #9ca3af;
-  --border: #e5e7eb;
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
-  --shadow-strong: 0 12px 32px rgba(0, 0, 0, 0.12);
-  --input: #ffffff;
-  --tab-inactive: #f3f4f6;
-  --tab-active: #ffffff;
+  --color-bg-page: #f3f4f6;
+  --color-bg-card: #ffffff;
+  --color-bg-subtle: #f7f7f8;
+  --color-text-primary: #111827;
+  --color-text-muted: #4b5563;
+  --color-text-placeholder: #9ca3af;
+  --color-border-subtle: #e5e7eb;
+  --color-shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.08);
+  --color-shadow-strong: 0 14px 36px rgba(0, 0, 0, 0.12);
+  --color-input: #ffffff;
+  --color-tab-inactive: #e5e7eb;
+  --color-tab-active: #ffffff;
+  --color-tab-text: #374151;
+  --color-badge-high-bg: #fee2e2;
+  --color-badge-high-text: #dc2626;
+  --color-badge-medium-bg: #fef9c3;
+  --color-badge-medium-text: #b45309;
+  --color-badge-low-bg: #dcfce7;
+  --color-badge-low-text: #15803d;
+  --color-list-surface: #f9fafb;
 }
 
 :root.dark,
 [data-theme="dark"] {
   /* Dark palette is isolated so light tokens never leak */
   color-scheme: dark;
-  --bg: #0d0d10;
-  --card: #0f1117;
-  --card-muted: #1f2937;
-  --text: #f9fafb;
-  --text-muted: #a1a1aa;
-  --muted: #71717a;
-  --border: #2a2a2d;
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --shadow-strong: 0 12px 32px rgba(0, 0, 0, 0.6);
-  --input: #0f1117;
-  --tab-inactive: #1f2937;
-  --tab-active: #374151;
+  --color-bg-page: #0d0d10;
+  --color-bg-card: #0f1117;
+  --color-bg-subtle: #171a22;
+  --color-text-primary: #f9fafb;
+  --color-text-muted: #a1a1aa;
+  --color-text-placeholder: #71717a;
+  --color-border-subtle: #2a2a2d;
+  --color-shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.45);
+  --color-shadow-strong: 0 14px 36px rgba(0, 0, 0, 0.6);
+  --color-input: #0f1117;
+  --color-tab-inactive: #1f2937;
+  --color-tab-active: #171923;
+  --color-tab-text: #e5e7eb;
+  --color-badge-high-bg: #7f1d1d;
+  --color-badge-high-text: #fecdd3;
+  --color-badge-medium-bg: #78350f;
+  --color-badge-medium-text: #fcd34d;
+  --color-badge-low-bg: #064e3b;
+  --color-badge-low-text: #bbf7d0;
+  --color-list-surface: #11131b;
 }
 
 * {
@@ -52,31 +68,31 @@
 body {
   font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
   min-height: 100vh;
-  background-color: var(--bg);
-  color: var(--text);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
   transition: background-color 200ms ease, color 200ms ease;
 }
 
 /* Card shell used across dashboard containers */
 .card-surface {
-  background-color: var(--card);
-  border: 1px solid var(--border);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 1rem;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--color-shadow-soft);
 }
 
 /* Shared tab styling keeps layout consistent while colors come from tokens */
 .tab-button {
   @apply relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-indigo-500;
-  color: var(--text-muted);
-  background-color: var(--tab-inactive);
-  border: 1px solid var(--border);
+  color: var(--color-tab-text);
+  background-color: var(--color-tab-inactive);
+  border: 1px solid var(--color-border-subtle);
 }
 
 .tab-button.is-active {
-  color: var(--text);
-  background-color: var(--tab-active);
-  box-shadow: var(--shadow-soft);
+  color: var(--color-text-primary);
+  background-color: var(--color-tab-active);
+  box-shadow: var(--color-shadow-soft);
 }
 
 /* Input primitives stay visually identical aside from color tokens */
@@ -87,17 +103,17 @@ input[type="text"],
 input[type="date"],
 input[type="time"] {
   @apply box-border w-full rounded-xl border text-[14px] leading-[1.4] shadow-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500/70;
-  background-color: var(--input);
-  border-color: var(--border);
-  color: var(--text);
+  background-color: var(--color-input);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
   padding-left: 0.75rem;
   padding-right: 0.75rem;
+  min-height: 44px;
 }
 
 textarea,
 select,
 input[type="text"] {
-  min-height: 42px;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
@@ -108,20 +124,48 @@ input[type="text"] {
 */
 input[type="date"],
 input[type="time"] {
-  height: 42px;
-  font-size: 14px;
-  line-height: 1.4;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  padding-right: 2.5rem;
   appearance: none;
+  -webkit-appearance: none;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 0.75rem !important;
+  padding-right: 2.5rem !important;
   background-position: right 0.75rem center;
   background-repeat: no-repeat;
 }
 
+input[type="date"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value {
+  min-height: 44px;
+  padding: 4px 0;
+}
+
+::-webkit-calendar-picker-indicator {
+  padding: 0 !important;
+  margin-left: 6px !important;
+}
+
 input::placeholder,
 textarea::placeholder {
-  color: var(--muted);
+  color: var(--color-text-placeholder);
+}
+
+/* Priority badges pick up semantic theme tokens */
+.badge-high {
+  background-color: var(--color-badge-high-bg);
+  color: var(--color-badge-high-text);
+}
+
+.badge-medium {
+  background-color: var(--color-badge-medium-bg);
+  color: var(--color-badge-medium-text);
+}
+
+.badge-low {
+  background-color: var(--color-badge-low-bg);
+  color: var(--color-badge-low-text);
 }
 
 /* Badge + gradient helpers */
