@@ -5,7 +5,7 @@ import { Greeting } from "@/components/common/greeting";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { usePersistentState } from "@/components/hooks/use-persistent-state";
 import { ScheduleForm } from "@/components/schedule/schedule-form";
-import { ScheduleList } from "@/components/schedule/schedule-list";
+import { ScheduleCalendar } from "@/components/schedule/schedule-calendar";
 import { TaskForm } from "@/components/tasks/task-form";
 import { TaskList } from "@/components/tasks/task-list";
 import { createId } from "@/lib/id";
@@ -118,7 +118,7 @@ export default function HomePage() {
                 <ScheduleForm onCreate={addSchedule} />
               </div>
               <div className="lg:col-span-2">
-                <ScheduleList schedules={schedules} onDelete={deleteSchedule} />
+                <ScheduleCalendar schedules={schedules} onDelete={deleteSchedule} />
               </div>
             </>
           )}
