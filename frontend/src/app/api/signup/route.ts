@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { DatabaseError } from "pg";
 
 import { attachAuthCookie, hashPassword, signSession } from "@/lib/auth";
 import { query } from "@/lib/db";
@@ -18,7 +19,15 @@ type UserRow = {
 };
 
 export async function POST(request: NextRequest) {
-  const body = (await request.json()) as SignupBody;
+  let body: SignupBody;
+
+  try {
+    body = (await request.json()) as SignupBody;
+  } catch (error) {
+    console.error("[api/signup] invalid JSON body", error);
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
   const email = body.email?.trim().toLowerCase();
   const password = body.password?.trim();
   const username = body.username?.trim();
@@ -52,6 +61,11 @@ export async function POST(request: NextRequest) {
       [email, passwordHash, username]
     );
 
+    if (inserted.rowCount !== 1 || !inserted.rows[0]) {
+      console.error("[api/signup] insert returned no rows", inserted);
+      return NextResponse.json({ error: "Failed to save user" }, { status: 500 });
+    }
+
     const user = inserted.rows[0];
     const token = signSession({ userId: user.id, email: user.email, username: user.username });
     const response = NextResponse.json({
@@ -62,7 +76,13 @@ export async function POST(request: NextRequest) {
     attachAuthCookie(response, token);
     return response;
   } catch (error) {
+    if (error instanceof DatabaseError && error.code === "23505") {
+      console.error("[api/signup] duplicate key violation", error);
+      return NextResponse.json({ error: "Email or username already in use" }, { status: 409 });
+    }
+
+    const message = error instanceof Error ? error.message : "Failed to create account";
     console.error("[api/signup] failed to sign up", error);
-    return NextResponse.json({ error: "Failed to create account" }, { status: 500 });
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
