@@ -91,13 +91,13 @@ export default function HomePage() {
     }`;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-4 pb-16 pt-10 sm:px-8 lg:px-12">
+    <main className="mx-auto flex min-h-screen w-full max-w-[1080px] flex-col gap-6 px-4 pb-16 pt-8 sm:px-6 lg:px-8">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Greeting />
         <ThemeToggle />
       </header>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <section className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <SummaryCard label="Tasks" primary={stats.tasksRemaining} description="Incomplete" />
         <SummaryCard label="Schedule" primary={stats.scheduleCount} description="Upcoming" />
       </section>
@@ -125,8 +125,8 @@ export default function HomePage() {
           {activeTab === "tasks" ? (
             <>
               <div
-                className={`grid grid-cols-1 gap-4 transition-all duration-300 ${
-                  activeForm === "task" ? "scale-95 -translate-y-1" : "scale-100 translate-y-0"
+                className={`grid grid-cols-1 gap-4 transition-all duration-200 ${
+                  activeForm === "task" ? "scale-[0.99] -translate-y-0.5" : "scale-100 translate-y-0"
                 }`}
                 aria-expanded={activeForm === "task"}
               >
@@ -153,14 +153,14 @@ export default function HomePage() {
                 </div>
               )}
             </>
-          ) : (
-            <>
-              <div
-                className={`grid grid-cols-1 gap-4 transition-all duration-300 ${
-                  activeForm === "schedule" ? "scale-95 -translate-y-1" : "scale-100 translate-y-0"
-                }`}
-                aria-expanded={activeForm === "schedule"}
-              >
+              ) : (
+                <>
+                  <div
+                    className={`grid grid-cols-1 gap-4 transition-all duration-200 ${
+                      activeForm === "schedule" ? "scale-[0.99] -translate-y-0.5" : "scale-100 translate-y-0"
+                    }`}
+                    aria-expanded={activeForm === "schedule"}
+                  >
                 <ScheduleCalendar
                   schedules={schedules}
                   onDelete={deleteSchedule}
@@ -200,12 +200,12 @@ function SummaryCard({
   description: string;
 }) {
   return (
-    <div className="card-surface flex items-center justify-between p-4">
-      <div>
-        <p className="text-sm font-medium text-[var(--color-text-muted)]">{label}</p>
+    <div className="card-surface flex items-center justify-between p-3.5 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+      <div className="leading-tight">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{label}</p>
         <p className="text-3xl font-bold text-[var(--color-text-primary)]">{primary}</p>
       </div>
-      <span className="rounded-full bg-[var(--color-bg-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+      <span className="rounded-full bg-[var(--color-bg-subtle)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
         {description}
       </span>
     </div>

@@ -52,55 +52,55 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onRequestCreate }:
     `tab-button ${filter === key ? "is-active shadow-[0_10px_24px_var(--color-shadow-soft)]" : "hover:shadow-sm"}`;
 
   return (
-    <div className="card-surface space-y-4 p-5">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-        <div className="space-y-1">
+    <div className="card-surface space-y-3.5 p-4">
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-0.5">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Tasks</h2>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Overview</p>
         </div>
 
-        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end">
-          {onRequestCreate && (
-            <button
-              onClick={onRequestCreate}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-            >
-              + New Task
-            </button>
-          )}
+        <div className="flex flex-col gap-2 lg:min-w-[420px]">
+          <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
+            {onRequestCreate && (
+              <button
+                onClick={onRequestCreate}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(99,102,241,0.25)] transition hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+              >
+                + New Task
+              </button>
+            )}
 
-          <div className="flex flex-wrap items-center gap-2">
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value as typeof sortBy)}
-              className="input-field rounded-full px-4 py-2 text-xs font-semibold"
+              className="input-field w-auto rounded-full px-4 py-2 text-xs font-semibold"
             >
               <option value="priority">Sort: Priority</option>
               <option value="dueDate">Sort: Due date</option>
               <option value="createdAt">Sort: Created</option>
             </select>
+          </div>
 
-            <div className="flex flex-wrap gap-2">
-              {[
-                { key: "all", label: "All" },
-                { key: "high", label: "High" },
-                { key: "today", label: "Due today" },
-                { key: "incomplete", label: "Incomplete" },
-              ].map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => setFilter(item.key as typeof filter)}
-                  className={filterTabClass(item.key)}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+            {[
+              { key: "all", label: "All" },
+              { key: "high", label: "High" },
+              { key: "today", label: "Due today" },
+              { key: "incomplete", label: "Incomplete" },
+            ].map((item) => (
+              <button
+                key={item.key}
+                onClick={() => setFilter(item.key as typeof filter)}
+                className={filterTabClass(item.key)}
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 gap-2.5">
         {filteredTasks.length === 0 && (
           <div className="rounded-xl border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-6 text-center text-sm text-[var(--color-text-muted)]">
             No tasks found for this view.
@@ -110,9 +110,9 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onRequestCreate }:
         {filteredTasks.map((task) => (
           <article
             key={task.id}
-            className="flex flex-col gap-4 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-list-surface)] p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)]"
+            className="flex flex-col gap-3 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-list-surface)] px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)]"
           >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
                 <input
                   id={`task-${task.id}`}
