@@ -7,9 +7,10 @@ import { TimeField } from "../common/time-field";
 
 interface Props {
   onCreate: (input: { title: string; date: string; time: string; notes: string }) => void;
+  onClose?: () => void;
 }
 
-export function ScheduleForm({ onCreate }: Props) {
+export function ScheduleForm({ onCreate, onClose }: Props) {
   const today = useMemo(() => toLocalDateString(new Date()), []);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(today);
@@ -36,14 +37,26 @@ export function ScheduleForm({ onCreate }: Props) {
       className="card-surface space-y-3.5 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-strong)]"
       aria-label="Create a new schedule entry"
     >
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="space-y-0.5">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Add to Schedule</h2>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">New entry</p>
         </div>
-        <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-100">
-          Plan ahead
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-100">
+            Plan ahead
+          </span>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-8 items-center justify-center rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-2.5 text-xs font-semibold text-[var(--color-text-muted)] shadow-sm transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
+              aria-label="Close schedule form"
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
