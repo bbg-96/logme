@@ -14,9 +14,10 @@ interface Props {
   tasks: Task[];
   onToggleComplete: (id: string) => void;
   onDelete: (id: string) => void;
+  onRequestCreate?: () => void;
 }
 
-export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
+export function TaskList({ tasks, onToggleComplete, onDelete, onRequestCreate }: Props) {
   const [sortBy, setSortBy] = useState<"priority" | "dueDate" | "createdAt">("priority");
   const [filter, setFilter] = useState<"all" | "high" | "today" | "incomplete">("all");
 
@@ -52,38 +53,49 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
 
   return (
     <div className="card-surface space-y-4 p-5">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Tasks</h2>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Overview</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <select
-            value={sortBy}
-            onChange={(event) => setSortBy(event.target.value as typeof sortBy)}
-            className="input-field rounded-full px-4 py-2 text-xs font-semibold"
-          >
-            <option value="priority">Sort: Priority</option>
-            <option value="dueDate">Sort: Due date</option>
-            <option value="createdAt">Sort: Created</option>
-          </select>
+        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end">
+          {onRequestCreate && (
+            <button
+              onClick={onRequestCreate}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+            >
+              + New Task
+            </button>
+          )}
 
-          <div className="flex flex-wrap gap-2">
-            {[
-              { key: "all", label: "All" },
-              { key: "high", label: "High" },
-              { key: "today", label: "Due today" },
-              { key: "incomplete", label: "Incomplete" },
-            ].map((item) => (
-              <button
-                key={item.key}
-                onClick={() => setFilter(item.key as typeof filter)}
-                className={filterTabClass(item.key)}
-              >
-                {item.label}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-2">
+            <select
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value as typeof sortBy)}
+              className="input-field rounded-full px-4 py-2 text-xs font-semibold"
+            >
+              <option value="priority">Sort: Priority</option>
+              <option value="dueDate">Sort: Due date</option>
+              <option value="createdAt">Sort: Created</option>
+            </select>
+
+            <div className="flex flex-wrap gap-2">
+              {[
+                { key: "all", label: "All" },
+                { key: "high", label: "High" },
+                { key: "today", label: "Due today" },
+                { key: "incomplete", label: "Incomplete" },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setFilter(item.key as typeof filter)}
+                  className={filterTabClass(item.key)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

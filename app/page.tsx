@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Greeting } from "@/components/common/greeting";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { usePersistentState } from "@/components/hooks/use-persistent-state";
@@ -13,6 +13,7 @@ import { ScheduleItem, Task } from "@/lib/types";
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<"tasks" | "schedule">("tasks");
+  const [overlay, setOverlay] = useState<null | "task" | "schedule">(null);
 
   const {
     value: tasks,
@@ -58,6 +59,19 @@ export default function HomePage() {
 
   const deleteSchedule = (id: string) => setSchedules((current) => current.filter((entry) => entry.id !== id));
 
+  const closeOverlay = () => setOverlay(null);
+
+  useEffect(() => {
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeOverlay();
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   const stats = useMemo(() => {
     const incompleteTasks = tasks.filter((task) => !task.completed).length;
     return {
@@ -102,25 +116,50 @@ export default function HomePage() {
           Loading your dashboard...
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          {activeTab === "tasks" ? (
-            <>
-              <div className="lg:col-span-1">
-                <TaskForm onCreate={addTask} />
+        <div className="relative">
+          <div
+            className={`grid grid-cols-1 gap-4 transition-all duration-300 ${
+              overlay ? "scale-95 opacity-90 blur-[1px]" : "scale-100 opacity-100"
+            }`}
+            aria-hidden={Boolean(overlay)}
+          >
+            {activeTab === "tasks" ? (
+              <TaskList
+                tasks={tasks}
+                onToggleComplete={toggleTask}
+                onDelete={deleteTask}
+                onRequestCreate={() => setOverlay("task")}
+              />
+            ) : (
+              <ScheduleCalendar
+                schedules={schedules}
+                onDelete={deleteSchedule}
+                onRequestCreate={() => setOverlay("schedule")}
+              />
+            )}
+          </div>
+
+          {overlay && (
+            <div
+              className="fixed inset-0 z-40 flex items-start justify-center bg-[color:var(--color-bg-page)]/70 px-4 py-10 backdrop-blur-md"
+              onClick={closeOverlay}
+            >
+              <div
+                className="relative z-10 w-full max-w-2xl animate-[fadeIn_200ms_ease-out] drop-shadow-2xl"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="absolute -right-3 -top-3">
+                  <button
+                    onClick={closeOverlay}
+                    className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-md transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                    aria-label="Close form overlay"
+                  >
+                    ×
+                  </button>
+                </div>
+                {overlay === "task" ? <TaskForm onCreate={addTask} /> : <ScheduleForm onCreate={addSchedule} />}
               </div>
-              <div className="lg:col-span-2">
-                <TaskList tasks={tasks} onToggleComplete={toggleTask} onDelete={deleteTask} />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="lg:col-span-1">
-                <ScheduleForm onCreate={addSchedule} />
-              </div>
-              <div className="lg:col-span-2">
-                <ScheduleCalendar schedules={schedules} onDelete={deleteSchedule} />
-              </div>
-            </>
+            </div>
           )}
         </div>
       )}
