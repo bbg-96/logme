@@ -1,55 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-type Entry = {
-  id: number;
-  title: string | null;
-  content: string;
-  createdAt: string;
-};
+import { useJournalEntries } from "@/lib/journal-client";
 
-type JournalResponse = {
-  entries: Entry[];
-  error?: string;
-};
-
-type LoadState = "idle" | "loading" | "error";
-
-type GroupedEntries = Record<string, Entry[]>;
+type GroupedEntries = Record<string, ReturnType<typeof useJournalEntries>["entries"]>;
 
 export default function UserCalendarPage() {
   const { username } = useParams<{ username: string }>();
 
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const [loadState, setLoadState] = useState<LoadState>("idle");
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchEntries = async () => {
-      setLoadState("loading");
-      setError(null);
-
-      try {
-        const response = await fetch("/api/journal", { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("Failed to load entries");
-        }
-
-        const data: JournalResponse = await response.json();
-        setEntries(data.entries);
-        setLoadState("idle");
-      } catch (err) {
-        console.error("Failed to load calendar entries", err);
-        setError("Could not load your calendar entries. Please try again.");
-        setLoadState("error");
-      }
-    };
-
-    fetchEntries();
-  }, []);
+  const { entries, loadState, error } = useJournalEntries();
 
   const groupedByDate: GroupedEntries = useMemo(() => {
     return entries.reduce<GroupedEntries>((acc, entry) => {
@@ -75,6 +37,10 @@ export default function UserCalendarPage() {
 
     if (loadState === "error") {
       return <p className="text-sm text-rose-600">{error}</p>;
+    }
+
+    if (loadState === "unauthorized") {
+      return <p className="text-sm text-rose-600">You must be signed in to view {username}&apos;s calendar.</p>;
     }
 
     if (entries.length === 0) {

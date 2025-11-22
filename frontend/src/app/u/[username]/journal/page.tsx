@@ -1,27 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-type Entry = {
-  id: number;
-  title: string | null;
-  content: string;
-  createdAt: string;
-};
-
-type JournalResponse = {
-  entries: Entry[];
-  error?: string;
-};
-
-type CreateResponse = {
-  entry?: Entry;
-  error?: string;
-};
-
-type LoadState = "idle" | "loading" | "error";
+import { createJournalEntry, useJournalEntries } from "@/lib/journal-client";
 
 type SubmitState = "idle" | "submitting" | "error";
 
@@ -36,9 +19,8 @@ const formatDate = (value: string) =>
 export default function UserJournalPage() {
   const { username } = useParams<{ username: string }>();
 
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const [loadState, setLoadState] = useState<LoadState>("idle");
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const { entries, setEntries, loadState, error: loadError } = useJournalEntries();
+  const isReadonly = loadState === "unauthorized";
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -47,47 +29,20 @@ export default function UserJournalPage() {
 
   const totalEntries = useMemo(() => entries.length, [entries]);
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      setLoadState("loading");
-      setLoadError(null);
-      try {
-        const response = await fetch("/api/journal", { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("Failed to load entries");
-        }
-        const data: JournalResponse = await response.json();
-        setEntries(data.entries);
-        setLoadState("idle");
-      } catch (err) {
-        console.error("Failed to fetch journal entries", err);
-        setLoadState("error");
-        setLoadError("Could not load your journal. Please try again.");
-      }
-    };
-
-    fetchEntries();
-  }, []);
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitState("submitting");
     setSubmitError(null);
 
+    if (isReadonly) {
+      setSubmitState("error");
+      setSubmitError("You must be signed in to save entries.");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/journal", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content }),
-      });
-
-      const data: CreateResponse = await response.json();
-
-      if (!response.ok || !data.entry) {
-        throw new Error(data.error || "Failed to create entry");
-      }
-
-      setEntries((prev) => [data.entry!, ...prev]);
+      const entry = await createJournalEntry({ title, content });
+      setEntries((prev) => [entry, ...prev]);
       setTitle("");
       setContent("");
       setSubmitState("idle");
@@ -105,6 +60,14 @@ export default function UserJournalPage() {
 
     if (loadState === "error") {
       return <p className="text-sm text-rose-600">{loadError}</p>;
+    }
+
+    if (loadState === "unauthorized") {
+      return (
+        <p className="text-sm text-rose-600">
+          You must be signed in to view {username}&apos;s journal entries.
+        </p>
+      );
     }
 
     if (entries.length === 0) {
@@ -165,6 +128,7 @@ export default function UserJournalPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
+            disabled={isReadonly}
           />
           <textarea
             placeholder="What did you work on?"
@@ -172,15 +136,16 @@ export default function UserJournalPage() {
             onChange={(e) => setContent(e.target.value)}
             className="h-32 w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
             required
+            disabled={isReadonly}
           />
           {submitError && <p className="text-sm text-rose-600">{submitError}</p>}
           <div className="flex justify-end">
             <button
               type="submit"
-              disabled={submitState === "submitting"}
+              disabled={submitState === "submitting" || isReadonly}
               className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-70"
             >
-              {submitState === "submitting" ? "Saving..." : "Save entry"}
+              {isReadonly ? "Sign in to save" : submitState === "submitting" ? "Saving..." : "Save entry"}
             </button>
           </div>
         </form>
