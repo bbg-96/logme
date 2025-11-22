@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
+import { NextResponse } from "next/server";
+
 import { query } from "@/lib/db";
 
 type RawEntry = {
@@ -30,6 +32,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+export async function GET() {
   try {
     const result = await query<RawEntry>(
       `
@@ -40,6 +43,9 @@ export async function GET(request: NextRequest) {
         LIMIT 1
       `,
       [session.userId]
+        ORDER BY created_at DESC
+        LIMIT 1
+      `
     );
 
     const raw = result.rows[0];

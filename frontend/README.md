@@ -46,10 +46,32 @@ The app now isolates each user into their own directory under `/u/<username>/...
    CREATE TABLE IF NOT EXISTS journal_entries (
      id SERIAL PRIMARY KEY,
      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+The Today page reads the most recent row from a `journal_entries` table and shows a green **DB Connected** badge when the `/api/db-check` route can connect to your database. To try the full flow locally:
+
+1. Install dependencies (includes `pg` for PostgreSQL):
+
+   ```bash
+   npm install
+   ```
+
+2. Create a `.env.local` file at the project root with your database connection string:
+
+   ```bash
+   DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<database>
+   ```
+
+3. Create the table the Today page expects and seed a sample log entry:
+
+   ```sql
+   CREATE TABLE IF NOT EXISTS journal_entries (
+     id SERIAL PRIMARY KEY,
      title TEXT,
      content TEXT NOT NULL,
      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
    );
+
+   INSERT INTO journal_entries (title, content)
+   VALUES ('First day with LogMe', 'Kicked the tires on the dashboard and DB connectivity.');
    ```
 
 4. Start the dev server:
@@ -67,6 +89,13 @@ The app now isolates each user into their own directory under `/u/<username>/...
 - **User-scoped data:** `/api/today` filters `journal_entries` by the authenticated `user_id`, ensuring isolation between users.
 - **DB connectivity check:** `/api/db-check` still runs `SELECT 1` against the pool created from `DATABASE_URL`.
 - **UI interactions:** Mood selection, schedule, highlights, and the quick-note textarea are front-end only; persist them by adding additional authenticated APIs.
+5. Open http://localhost:3000. You should see **DB Connected** in the top-right badge and the seeded log under **Latest work log**. If the table is empty you will see an empty-state message instead.
+
+### What’s wired up today
+
+- **DB connectivity check:** `/api/db-check` runs `SELECT 1` against the pool created from `DATABASE_URL`.
+- **Latest work log:** `/api/today` returns the newest row from `journal_entries` for the Today page.
+- **UI interactions:** Mood selection, schedule, highlights, and the quick-note textarea are front-end only; saving notes or moods would require adding new API routes and tables similar to `journal_entries`.
 
 ## Learn More
 
