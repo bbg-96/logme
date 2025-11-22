@@ -13,7 +13,7 @@ import { ScheduleItem, Task } from "@/lib/types";
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<"tasks" | "schedule">("tasks");
-  const [overlay, setOverlay] = useState<null | "task" | "schedule">(null);
+  const [activeForm, setActiveForm] = useState<null | "task" | "schedule">(null);
 
   const {
     value: tasks,
@@ -59,18 +59,23 @@ export default function HomePage() {
 
   const deleteSchedule = (id: string) => setSchedules((current) => current.filter((entry) => entry.id !== id));
 
-  const closeOverlay = () => setOverlay(null);
+  const closeForm = () => setActiveForm(null);
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        closeOverlay();
+        closeForm();
       }
     };
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
+
+  const handleTabChange = (tab: "tasks" | "schedule") => {
+    setActiveForm(null);
+    setActiveTab(tab);
+  };
 
   const stats = useMemo(() => {
     const incompleteTasks = tasks.filter((task) => !task.completed).length;
@@ -99,10 +104,10 @@ export default function HomePage() {
 
       <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-2">
         <div className="flex items-center gap-2">
-          <button onClick={() => setActiveTab("tasks")} className={tabClass("tasks")}>
+          <button onClick={() => handleTabChange("tasks")} className={tabClass("tasks")}>
             Tasks
           </button>
-          <button onClick={() => setActiveTab("schedule")} className={tabClass("schedule")}>
+          <button onClick={() => handleTabChange("schedule")} className={tabClass("schedule")}>
             Schedule
           </button>
         </div>
@@ -116,50 +121,68 @@ export default function HomePage() {
           Loading your dashboard...
         </div>
       ) : (
-        <div className="relative">
-          <div
-            className={`grid grid-cols-1 gap-4 transition-all duration-300 ${
-              overlay ? "scale-95 opacity-90 blur-[1px]" : "scale-100 opacity-100"
-            }`}
-            aria-hidden={Boolean(overlay)}
-          >
-            {activeTab === "tasks" ? (
-              <TaskList
-                tasks={tasks}
-                onToggleComplete={toggleTask}
-                onDelete={deleteTask}
-                onRequestCreate={() => setOverlay("task")}
-              />
-            ) : (
-              <ScheduleCalendar
-                schedules={schedules}
-                onDelete={deleteSchedule}
-                onRequestCreate={() => setOverlay("schedule")}
-              />
-            )}
-          </div>
-
-          {overlay && (
-            <div
-              className="fixed inset-0 z-40 flex items-start justify-center bg-[color:var(--color-bg-page)]/70 px-4 py-10 backdrop-blur-md"
-              onClick={closeOverlay}
-            >
+        <div className="space-y-4">
+          {activeTab === "tasks" ? (
+            <>
               <div
-                className="relative z-10 w-full max-w-2xl animate-[fadeIn_200ms_ease-out] drop-shadow-2xl"
-                onClick={(event) => event.stopPropagation()}
+                className={`grid grid-cols-1 gap-4 transition-all duration-300 ${
+                  activeForm === "task" ? "scale-95 -translate-y-1" : "scale-100 translate-y-0"
+                }`}
+                aria-expanded={activeForm === "task"}
               >
-                <div className="absolute -right-3 -top-3">
-                  <button
-                    onClick={closeOverlay}
-                    className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-md transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                    aria-label="Close form overlay"
-                  >
-                    ×
-                  </button>
-                </div>
-                {overlay === "task" ? <TaskForm onCreate={addTask} /> : <ScheduleForm onCreate={addSchedule} />}
+                <TaskList
+                  tasks={tasks}
+                  onToggleComplete={toggleTask}
+                  onDelete={deleteTask}
+                  onRequestCreate={() => setActiveForm("task")}
+                />
               </div>
-            </div>
+
+              {activeForm === "task" && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={closeForm}
+                      className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                      aria-label="Close task form"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <TaskForm onCreate={addTask} />
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div
+                className={`grid grid-cols-1 gap-4 transition-all duration-300 ${
+                  activeForm === "schedule" ? "scale-95 -translate-y-1" : "scale-100 translate-y-0"
+                }`}
+                aria-expanded={activeForm === "schedule"}
+              >
+                <ScheduleCalendar
+                  schedules={schedules}
+                  onDelete={deleteSchedule}
+                  onRequestCreate={() => setActiveForm("schedule")}
+                />
+              </div>
+
+              {activeForm === "schedule" && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={closeForm}
+                      className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                      aria-label="Close schedule form"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <ScheduleForm onCreate={addSchedule} />
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
