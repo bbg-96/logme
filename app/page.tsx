@@ -90,30 +90,46 @@ export default function HomePage() {
       activeTab === tab ? "shadow-[0_10px_24px_var(--color-shadow-soft)]" : "hover:shadow-sm"
     }`;
 
+  const isTasksTab = activeTab === "tasks";
+  const isScheduleTab = activeTab === "schedule";
+
+  const layoutSpacing = isScheduleTab ? "gap-4 pt-6" : "gap-6 pt-8";
+
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-[1080px] flex-col gap-6 px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+    <main
+      className={`mx-auto flex min-h-screen w-full max-w-[1080px] flex-col ${layoutSpacing} px-4 pb-16 sm:px-6 lg:px-8`}
+    >
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Greeting />
         <ThemeToggle />
       </header>
 
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <SummaryCard label="Tasks" primary={stats.tasksRemaining} description="Incomplete" />
-        <SummaryCard label="Schedule" primary={stats.scheduleCount} description="Upcoming" />
-      </section>
+      <div
+        className={`flex flex-col gap-3 transition-[background-color,box-shadow,padding] duration-200 ${
+          isTasksTab
+            ? "sticky top-0 z-30 -mx-4 px-4 pb-3 pt-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)] sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+            : ""
+        } ${isScheduleTab ? "gap-2.5" : ""}`}
+        style={isTasksTab ? { backgroundColor: "var(--color-bg-page)" } : undefined}
+      >
+        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <SummaryCard label="Tasks" primary={stats.tasksRemaining} description="Incomplete" />
+          <SummaryCard label="Schedule" primary={stats.scheduleCount} description="Upcoming" />
+        </section>
 
-      <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-2">
-        <div className="flex items-center gap-2">
-          <button onClick={() => handleTabChange("tasks")} className={tabClass("tasks")}>
-            Tasks
-          </button>
-          <button onClick={() => handleTabChange("schedule")} className={tabClass("schedule")}>
-            Schedule
-          </button>
+        <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-2">
+          <div className="flex items-center gap-2">
+            <button onClick={() => handleTabChange("tasks")} className={tabClass("tasks")}>
+              Tasks
+            </button>
+            <button onClick={() => handleTabChange("schedule")} className={tabClass("schedule")}>
+              Schedule
+            </button>
+          </div>
+          <p className="text-xs font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+            {activeTab === "tasks" ? "Prioritize and complete" : "Plan your day"}
+          </p>
         </div>
-        <p className="text-xs font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
-          {activeTab === "tasks" ? "Prioritize and complete" : "Plan your day"}
-        </p>
       </div>
 
       {!isReady ? (

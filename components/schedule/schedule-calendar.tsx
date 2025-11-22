@@ -86,8 +86,8 @@ export function ScheduleCalendar({
   const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="card-surface space-y-4 p-4">
-      <div className="flex flex-col gap-2.5 md:flex-row md:items-center md:justify-between">
+    <div className="card-surface space-y-3.5 p-3.5 md:p-4">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div className="space-y-0.5">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Schedule</h2>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Monthly view</p>
@@ -123,13 +123,13 @@ export function ScheduleCalendar({
         </div>
       </div>
 
-      <div className={isFormOpen ? "grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]" : "space-y-3"}>
+      <div className={isFormOpen ? "grid grid-cols-1 gap-3.5 lg:grid-cols-[360px_1fr]" : "space-y-3"}>
         {isFormOpen && formContent && (
           <div className="lg:sticky lg:top-4">{formContent}</div>
         )}
 
         <div className={`space-y-3 ${isFormOpen ? "lg:max-h-[760px] lg:overflow-y-auto lg:pr-1" : ""}`}>
-          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-4 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
+          <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3.5 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-4">
             <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
               {weekdayLabels.map((day) => (
                 <span key={day} className="py-1">
@@ -138,8 +138,8 @@ export function ScheduleCalendar({
               ))}
             </div>
 
-            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
-              <div className="grid grid-cols-7 gap-[6px] sm:gap-2">
+            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[3px] sm:p-2">
+              <div className="grid grid-cols-7 gap-[4px] sm:gap-1.5">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
@@ -160,7 +160,7 @@ export function ScheduleCalendar({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm">
+          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-2.5 shadow-sm sm:p-3">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>

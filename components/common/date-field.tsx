@@ -106,6 +106,18 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
   useEffect(() => {
     if (!open) return undefined;
 
+    const handleScrollDismiss = () => setOpen(false);
+
+    window.addEventListener("scroll", handleScrollDismiss, true);
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollDismiss, true);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+
     const updatePosition = () => {
       const rect = containerRef.current?.getBoundingClientRect();
       if (!rect) return;
