@@ -1,138 +1,65 @@
-"use client";
-
-import { useMemo, useState } from "react";
-import { Calendar } from "../components/Calendar";
-import { DayDetail } from "../components/DayDetail";
-import { TodaySummary } from "../components/TodaySummary";
-import { WeeklySummary } from "../components/WeeklySummary";
-import { formatDateKey } from "../lib/dateUtils";
-import { loadPlannerData, savePlannerData } from "../lib/storage";
-import { DayData, PlannerData, ScheduleItem, TaskItem } from "../lib/types";
-
-const emptyDay: DayData = { schedules: [], tasks: [] };
+import Image from "next/image";
 
 export default function Home() {
-  const [plannerData, setPlannerData] = useState<PlannerData>(() => loadPlannerData());
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const selectedDateKey = useMemo(() => formatDateKey(selectedDate), [selectedDate]);
-  const selectedDayData = plannerData[selectedDateKey] || emptyDay;
-
-  const persist = (updater: (prev: PlannerData) => PlannerData) => {
-    setPlannerData((prev) => {
-      const next = updater(prev);
-      savePlannerData(next);
-      return next;
-    });
-  };
-
-  const getId = () =>
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-      ? crypto.randomUUID()
-      : Math.random().toString(36).slice(2);
-
-  const ensureDay = (prev: PlannerData, dateKey: string): DayData =>
-    prev[dateKey] || { schedules: [], tasks: [] };
-
-  const handleAddSchedule = (item: Omit<ScheduleItem, "id">) => {
-    persist((prev) => {
-      const day = ensureDay(prev, selectedDateKey);
-      const schedules = [...day.schedules, { ...item, id: getId() }].sort((a, b) => {
-        if (!a.time) return 1;
-        if (!b.time) return -1;
-        return a.time.localeCompare(b.time);
-      });
-      return {
-        ...prev,
-        [selectedDateKey]: { ...day, schedules },
-      };
-    });
-  };
-
-  const handleDeleteSchedule = (id: string) => {
-    persist((prev) => {
-      const day = ensureDay(prev, selectedDateKey);
-      return {
-        ...prev,
-        [selectedDateKey]: {
-          ...day,
-          schedules: day.schedules.filter((item) => item.id !== id),
-        },
-      };
-    });
-  };
-
-  const handleAddTask = (item: Omit<TaskItem, "id" | "done">) => {
-    persist((prev) => {
-      const day = ensureDay(prev, selectedDateKey);
-      return {
-        ...prev,
-        [selectedDateKey]: {
-          ...day,
-          tasks: [...day.tasks, { ...item, id: getId(), done: false }],
-        },
-      };
-    });
-  };
-
-  const handleToggleTask = (id: string) => {
-    persist((prev) => {
-      const day = ensureDay(prev, selectedDateKey);
-      return {
-        ...prev,
-        [selectedDateKey]: {
-          ...day,
-          tasks: day.tasks.map((task) =>
-            task.id === id ? { ...task, done: !task.done } : task
-          ),
-        },
-      };
-    });
-  };
-
-  const handleDeleteTask = (id: string) => {
-    persist((prev) => {
-      const day = ensureDay(prev, selectedDateKey);
-      return {
-        ...prev,
-        [selectedDateKey]: {
-          ...day,
-          tasks: day.tasks.filter((task) => task.id !== id),
-        },
-      };
-    });
-  };
-
-  const handleSelectDate = (dateKey: string) => {
-    setSelectedDate(new Date(dateKey));
-  };
-
   return (
-    <div className="space-y-6">
-      <TodaySummary plannerData={plannerData} />
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-1">
-          <Calendar
-            selectedDate={selectedDate}
-            onSelectDate={handleSelectDate}
-            plannerData={plannerData}
-          />
-          <WeeklySummary plannerData={plannerData} />
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <Image
+          className="dark:invert"
+          src="/next.svg"
+          alt="Next.js logo"
+          width={100}
+          height={20}
+          priority
+        />
+        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
+          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+            To get started, edit the page.tsx file.
+          </h1>
+          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+            Looking for a starting point or more instructions? Head over to{" "}
+            <a
+              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
+            >
+              Templates
+            </a>{" "}
+            or the{" "}
+            <a
+              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
+            >
+              Learning
+            </a>{" "}
+            center.
+          </p>
         </div>
-
-        <div className="lg:col-span-2">
-          <DayDetail
-            date={selectedDate}
-            dayData={selectedDayData}
-            onAddSchedule={handleAddSchedule}
-            onDeleteSchedule={handleDeleteSchedule}
-            onAddTask={handleAddTask}
-            onToggleTask={handleToggleTask}
-            onDeleteTask={handleDeleteTask}
-          />
+        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+          <a
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              className="dark:invert"
+              src="/vercel.svg"
+              alt="Vercel logomark"
+              width={16}
+              height={16}
+            />
+            Deploy Now
+          </a>
+          <a
+            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Documentation
+          </a>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
