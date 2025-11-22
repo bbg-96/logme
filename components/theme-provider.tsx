@@ -37,7 +37,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!isReady) return;
     const root = window.document.documentElement;
+    // Theme toggling writes to both a class and data attribute so CSS variables
+    // (defined in app/globals.css) pick the correct token set for every component.
     root.classList.toggle("dark", theme === "dark");
+    root.dataset.theme = theme;
     window.localStorage.setItem(STORAGE_KEY, theme);
   }, [isReady, theme]);
 
