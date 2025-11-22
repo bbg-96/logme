@@ -1,6 +1,26 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+type DbStatus = "checking" | "ok" | "error";
+type EntryState = "loading" | "loaded" | "error";
+
+type TodayEntry = {
+  id: number;
+  title: string | null;
+  content: string;
+  createdAt: string;
+};
+
+type TodayApiResponse = {
+  entry: TodayEntry | null;
+  error?: string;
+};
+
+type DbCheckResponse = {
+  ok: boolean;
+  error?: string;
+};
 
 const moods = [
   { label: "Great", emoji: "😄" },
@@ -17,8 +37,39 @@ const scheduleItems = [
   { time: "16:30", title: "Wrap-up notes", description: "Summarize today" },
 ];
 
+const statusStyles: Record<DbStatus, { bg: string; text: string; label: string }> = {
+  checking: {
+    label: "Checking DB",
+    bg: "bg-amber-100",
+    text: "text-amber-700",
+  },
+  ok: {
+    label: "DB Connected",
+    bg: "bg-emerald-100",
+    text: "text-emerald-700",
+  },
+  error: {
+    label: "DB Unavailable",
+    bg: "bg-rose-100",
+    text: "text-rose-700",
+  },
+};
+
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+
 export default function Home() {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [dbStatus, setDbStatus] = useState<DbStatus>("checking");
+  const [latestEntry, setLatestEntry] = useState<TodayEntry | null>(null);
+  const [entryState, setEntryState] = useState<EntryState>("loading");
+  const [entryError, setEntryError] = useState<string | null>(null);
 
   const todayLabel = useMemo(
     () =>
@@ -31,16 +82,87 @@ export default function Home() {
     []
   );
 
+  useEffect(() => {
+    const fetchDbStatus = async () => {
+      try {
+        const response = await fetch("/api/db-check", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("DB check failed");
+        }
+        const data: DbCheckResponse = await response.json();
+        setDbStatus(data.ok ? "ok" : "error");
+      } catch (error) {
+        console.error("Failed to check DB status", error);
+        setDbStatus("error");
+      }
+    };
+
+    fetchDbStatus();
+  }, []);
+
+  useEffect(() => {
+    const fetchLatestEntry = async () => {
+      setEntryState("loading");
+      setEntryError(null);
+      try {
+        const response = await fetch("/api/today", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("Failed to fetch latest entry");
+        }
+
+        const data: TodayApiResponse = await response.json();
+        setLatestEntry(data.entry ?? null);
+        setEntryState("loaded");
+      } catch (error) {
+        console.error("Failed to fetch latest log entry", error);
+        setEntryError("Could not load your latest log. Please try again.");
+        setEntryState("error");
+      }
+    };
+
+    fetchLatestEntry();
+  }, []);
+
+  const renderLatestEntry = () => {
+    if (entryState === "loading") {
+      return <p className="text-sm text-slate-500">Loading latest log...</p>;
+    }
+
+    if (entryState === "error") {
+      return <p className="text-sm text-rose-600">{entryError}</p>;
+    }
+
+    if (!latestEntry) {
+      return <p className="text-sm text-slate-600">아직 저장된 로그가 없습니다.</p>;
+    }
+
+    return (
+      <div className="space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-4">
+        <div className="flex items-center justify-between">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Recent log</p>
+          <span className="text-xs font-medium text-slate-500">{formatDate(latestEntry.createdAt)}</span>
+        </div>
+        {latestEntry.title && <p className="text-base font-semibold text-slate-900">{latestEntry.title}</p>}
+        <p className="whitespace-pre-line text-sm text-slate-700">{latestEntry.content}</p>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-8">
       <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Today</p>
             <h1 className="text-2xl font-semibold text-slate-900">{todayLabel}</h1>
           </div>
-          <div className="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white">
-            Live
+          <div className="flex items-center gap-3">
+            <div className="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white">Live</div>
+            <span
+              className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide ${statusStyles[dbStatus].bg} ${statusStyles[dbStatus].text}`}
+            >
+              {statusStyles[dbStatus].label}
+            </span>
           </div>
         </div>
       </section>
@@ -97,6 +219,14 @@ export default function Home() {
       </section>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <div className="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">Latest work log</h2>
+            <span className="text-xs text-slate-500">Auto-refresh on load</span>
+          </div>
+          {renderLatestEntry()}
+        </div>
+
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-900">Today&apos;s log</h2>
@@ -112,7 +242,9 @@ export default function Home() {
             </button>
           </div>
         </div>
+      </section>
 
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-900">Highlights</h2>
@@ -123,6 +255,25 @@ export default function Home() {
             <li className="rounded-lg bg-slate-50 px-4 py-3">Draft AI assistant prompt flows</li>
             <li className="rounded-lg bg-slate-50 px-4 py-3">Align calendar sync with backend</li>
           </ul>
+        </div>
+        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">How you feel</h2>
+            <span className="text-xs text-slate-500">Mood selection</span>
+          </div>
+          <div className="mt-4 space-y-2 text-sm text-slate-700">
+            <p className="rounded-lg bg-slate-50 px-4 py-3">
+              Use the mood buttons above to log how you&apos;re doing today. It helps keep a light-weight record alongside your work
+              logs.
+            </p>
+            {selectedMood ? (
+              <p className="rounded-lg bg-emerald-50 px-4 py-3 text-emerald-700">
+                You marked today as <span className="font-semibold">{selectedMood}</span>.
+              </p>
+            ) : (
+              <p className="rounded-lg bg-amber-50 px-4 py-3 text-amber-700">No mood selected yet.</p>
+            )}
+          </div>
         </div>
       </section>
     </div>
