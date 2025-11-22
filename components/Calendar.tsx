@@ -28,10 +28,10 @@ export function Calendar({ selectedDate, onSelectDate, plannerData }: Props) {
   });
 
   return (
-    <div className="rounded-2xl bg-slate-900/70 p-6 shadow-lg shadow-black/40 ring-1 ring-white/5">
+    <div className="rounded-2xl bg-slate-900/60 p-6 shadow-lg shadow-black/40 ring-1 ring-white/5">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Calendar</p>
+          <p className="text-sm uppercase tracking-wide text-slate-400">Calendar</p>
           <h2 className="text-2xl font-semibold text-slate-100">{monthLabel}</h2>
         </div>
         <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export function Calendar({ selectedDate, onSelectDate, plannerData }: Props) {
                 (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
               )
             }
-            className="rounded-xl border border-slate-800 bg-slate-900/70 px-3 py-2 text-slate-200 transition hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="rounded-lg bg-slate-800 px-3 py-2 text-slate-200 ring-1 ring-white/10 transition hover:bg-slate-700"
           >
             ←
           </button>
@@ -53,7 +53,7 @@ export function Calendar({ selectedDate, onSelectDate, plannerData }: Props) {
                 (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
               )
             }
-            className="rounded-xl border border-slate-800 bg-slate-900/70 px-3 py-2 text-slate-200 transition hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="rounded-lg bg-slate-800 px-3 py-2 text-slate-200 ring-1 ring-white/10 transition hover:bg-slate-700"
           >
             →
           </button>
@@ -62,7 +62,7 @@ export function Calendar({ selectedDate, onSelectDate, plannerData }: Props) {
 
       <div className="mt-6 grid grid-cols-7 gap-2 text-center text-sm text-slate-400">
         {weekdayLabels.map((day) => (
-          <div key={day} className="rounded-xl bg-slate-900/70 py-2 font-medium ring-1 ring-slate-800">
+          <div key={day} className="rounded-lg bg-slate-800/60 py-2 font-medium">
             {day}
           </div>
         ))}
@@ -83,14 +83,14 @@ export function Calendar({ selectedDate, onSelectDate, plannerData }: Props) {
               onClick={() => onSelectDate(dateKey)}
               className={`group relative flex h-16 flex-col items-center justify-center rounded-xl border text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 isSelected
-                  ? "border-indigo-500 bg-indigo-600/15 text-indigo-100"
-                  : "border-slate-800 bg-slate-900/70 text-slate-200"
-              } ${!isCurrentMonth ? "text-slate-600" : ""} hover:bg-slate-800/60 hover:border-indigo-500/50`}
+                  ? "border-indigo-500 bg-indigo-500/10 text-indigo-100"
+                  : "border-white/5 bg-slate-900 text-slate-200"
+              } ${!isCurrentMonth ? "opacity-60" : ""} hover:border-indigo-500/60 hover:text-indigo-100`}
             >
               <span
                 className={`text-base font-semibold ${
                   isToday ? "text-emerald-400" : ""
-                } ${!isCurrentMonth ? "text-slate-600" : ""}`}
+                }`}
               >
                 {day.getDate()}
               </span>
@@ -98,7 +98,7 @@ export function Calendar({ selectedDate, onSelectDate, plannerData }: Props) {
                 <span className="mt-1 h-2 w-2 rounded-full bg-indigo-400"></span>
               )}
               {isToday && (
-                <span className="absolute right-2 top-2 rounded-full border border-emerald-500/60 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-200">
+                <span className="absolute right-2 top-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300">
                   Today
                 </span>
               )}
