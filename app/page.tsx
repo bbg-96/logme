@@ -1,65 +1,166 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useMemo, useState } from "react";
+import { Greeting } from "@/components/common/greeting";
+import { ThemeToggle } from "@/components/common/theme-toggle";
+import { usePersistentState } from "@/components/hooks/use-persistent-state";
+import { ScheduleForm } from "@/components/schedule/schedule-form";
+import { ScheduleList } from "@/components/schedule/schedule-list";
+import { TaskForm } from "@/components/tasks/task-form";
+import { TaskList } from "@/components/tasks/task-list";
+import { createId } from "@/lib/id";
+import { ScheduleItem, Task } from "@/lib/types";
+
+export default function HomePage() {
+  const [activeTab, setActiveTab] = useState<"tasks" | "schedule">("tasks");
+
+  const {
+    value: tasks,
+    setValue: setTasks,
+    hydrated: tasksReady,
+  } = usePersistentState<Task[]>("logme-tasks", []);
+
+  const {
+    value: schedules,
+    setValue: setSchedules,
+    hydrated: schedulesReady,
+  } = usePersistentState<ScheduleItem[]>("logme-schedules", []);
+
+  const isReady = tasksReady && schedulesReady;
+
+  const addTask = (input: Omit<Task, "id" | "createdAt" | "completed">) => {
+    setTasks((current) => [
+      ...current,
+      {
+        ...input,
+        id: createId(),
+        createdAt: new Date().toISOString(),
+        completed: false,
+      },
+    ]);
+  };
+
+  const toggleTask = (id: string) =>
+    setTasks((current) => current.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
+
+  const deleteTask = (id: string) => setTasks((current) => current.filter((task) => task.id !== id));
+
+  const addSchedule = (input: Omit<ScheduleItem, "id" | "createdAt">) => {
+    setSchedules((current) => [
+      ...current,
+      {
+        ...input,
+        id: createId(),
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  const deleteSchedule = (id: string) => setSchedules((current) => current.filter((entry) => entry.id !== id));
+
+  const stats = useMemo(() => {
+    const completed = tasks.filter((task) => task.completed).length;
+    return {
+      totalTasks: tasks.length,
+      completedTasks: completed,
+      pendingTasks: tasks.length - completed,
+      scheduleCount: schedules.length,
+    };
+  }, [schedules.length, tasks]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-8 px-4 pb-16 pt-10 sm:px-8 lg:px-12">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Greeting />
+        <ThemeToggle />
+      </header>
+
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <SummaryCard label="Tasks" primary={stats.totalTasks} accent={stats.completedTasks} description="Created" />
+        <SummaryCard label="Schedule" primary={stats.scheduleCount} accent={stats.pendingTasks} description="Upcoming" />
+      </section>
+
+      <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveTab("tasks")}
+            className={`tab-button ${
+              activeTab === "tasks"
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
+                : "bg-white text-slate-700 ring-1 ring-slate-200/80 dark:bg-slate-900/60 dark:text-slate-100 dark:ring-slate-800"
+            }`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Tasks
+          </button>
+          <button
+            onClick={() => setActiveTab("schedule")}
+            className={`tab-button ${
+              activeTab === "schedule"
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
+                : "bg-white text-slate-700 ring-1 ring-slate-200/80 dark:bg-slate-900/60 dark:text-slate-100 dark:ring-slate-800"
+            }`}
           >
-            Documentation
-          </a>
+            Schedule
+          </button>
         </div>
-      </main>
+        <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          {activeTab === "tasks" ? "Prioritize and complete" : "Plan your day"}
+        </p>
+      </div>
+
+      {!isReady ? (
+        <div className="card-surface animate-pulse p-6 text-sm text-slate-500">
+          Loading your dashboard...
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          {activeTab === "tasks" ? (
+            <>
+              <div className="lg:col-span-1">
+                <TaskForm onCreate={addTask} />
+              </div>
+              <div className="lg:col-span-2">
+                <TaskList tasks={tasks} onToggleComplete={toggleTask} onDelete={deleteTask} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="lg:col-span-1">
+                <ScheduleForm onCreate={addSchedule} />
+              </div>
+              <div className="lg:col-span-2">
+                <ScheduleList schedules={schedules} onDelete={deleteSchedule} />
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </main>
+  );
+}
+
+function SummaryCard({
+  label,
+  primary,
+  accent,
+  description,
+}: {
+  label: string;
+  primary: number;
+  accent: number;
+  description: string;
+}) {
+  return (
+    <div className="card-surface flex items-center justify-between p-4">
+      <div>
+        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white">{primary}</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-indigo-500">{description}</p>
+      </div>
+      <div className="rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 px-4 py-3 text-right text-white shadow-lg">
+        <p className="text-sm font-medium">Snapshot</p>
+        <p className="text-2xl font-bold">{accent}</p>
+      </div>
     </div>
   );
 }
