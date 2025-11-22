@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
 
 import { TodayPageShell } from "@/components/today/TodayPageShell";
 
@@ -24,7 +25,9 @@ type DbCheckResponse = {
   error?: string;
 };
 
-export default function UserTodayPage({ params }: { params: { username: string } }) {
+export default function UserTodayPage() {
+  const { username } = useParams<{ username: string }>();  // ✅ 여기서 username 확보
+
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [dbStatus, setDbStatus] = useState<DbStatus>("checking");
   const [latestEntry, setLatestEntry] = useState<TodayEntry | null>(null);
@@ -39,7 +42,7 @@ export default function UserTodayPage({ params }: { params: { username: string }
         day: "numeric",
         year: "numeric",
       }),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -85,7 +88,7 @@ export default function UserTodayPage({ params }: { params: { username: string }
 
   return (
     <TodayPageShell
-      username={params.username}
+      username={username ?? ""}
       todayLabel={todayLabel}
       selectedMood={selectedMood}
       setSelectedMood={setSelectedMood}

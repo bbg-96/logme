@@ -7,9 +7,12 @@ export default async function UserAreaLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { username: string };
+  // ✅ Next 16에서는 params가 Promise 형태라고 보고 타입도 이렇게 맞춰주기
+  params: Promise<{ username: string }>;
 }) {
-  const token = cookies().get(AUTH_COOKIE_NAME)?.value;
+  // cookies()는 이미 async 처리함
+  const cookieStore = await cookies();
+  const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
   if (!token) {
     redirect("/login");
@@ -20,7 +23,10 @@ export default async function UserAreaLayout({
     redirect("/login");
   }
 
-  if (session.username !== params.username) {
+  // ✅ 여기서 params를 한 번 await 해서 실제 값 꺼냄
+  const { username } = await params;
+
+  if (session.username !== username) {
     redirect(`/u/${session.username}/today`);
   }
 

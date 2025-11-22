@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { AUTH_COOKIE_NAME, verifySessionToken } from "@/lib/auth";
-import { NextResponse } from "next/server";
-
 import { query } from "@/lib/db";
 
 type RawEntry = {
@@ -12,28 +10,38 @@ type RawEntry = {
   created_at: string;
 };
 
+type TodayEntry = {
+  id: number;
+  title: string | null;
+  content: string;
+  createdAt: string;
+};
+
 type TodayResponse = {
-  entry: {
-    id: number;
-    title: string | null;
-    content: string;
-    createdAt: string;
-  } | null;
+  entry: TodayEntry | null;
+  error?: string;
 };
 
 export async function GET(request: NextRequest) {
+  // 1) JWT 쿠키 확인
   const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
   if (!token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json<TodayResponse>(
+      { entry: null, error: "Unauthorized" },
+      { status: 401 },
+    );
   }
 
   const session = verifySessionToken(token);
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json<TodayResponse>(
+      { entry: null, error: "Unauthorized" },
+      { status: 401 },
+    );
   }
 
-export async function GET() {
   try {
+    // 2) 해당 사용자(user_id)의 최신 로그 1개 조회
     const result = await query<RawEntry>(
       `
         SELECT id, title, content, created_at
@@ -42,33 +50,28 @@ export async function GET() {
         ORDER BY created_at DESC
         LIMIT 1
       `,
-      [session.userId]
-        ORDER BY created_at DESC
-        LIMIT 1
-      `
+      [session.userId],
     );
 
-    const raw = result.rows[0];
+    const row = result.rows[0];
 
-    const response: TodayResponse = raw
+    const entry: TodayEntry | null = row
       ? {
-          entry: {
-            id: raw.id,
-            title: raw.title,
-            content: raw.content,
-            createdAt: raw.created_at,
-          },
+          id: row.id,
+          title: row.title,
+          content: row.content,
+          createdAt: row.created_at,
         }
-      : { entry: null };
+      : null;
 
-    return NextResponse.json(response);
+    const body: TodayResponse = { entry };
+    return NextResponse.json(body);
   } catch (error) {
-    console.error("[api/today] failed to load latest journal entry", error);
-    return NextResponse.json(
-      {
-        error: "Failed to fetch the latest log entry",
-      },
-      { status: 500 }
+    console.error("[api/today] failed to fetch latest entry", error);
+
+    return NextResponse.json<TodayResponse>(
+      { entry: null, error: "Database unavailable" },
+      { status: 500 },
     );
   }
 }
