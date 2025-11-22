@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { parseLocalDateString, toLocalDateString } from "@/lib/date";
 import { ScheduleItem } from "@/lib/types";
 import { CalendarDayCell } from "./calendar-day-cell";
@@ -9,6 +9,9 @@ interface Props {
   schedules: ScheduleItem[];
   onDelete: (id: string) => void;
   onRequestCreate?: () => void;
+  isFormOpen?: boolean;
+  formContent?: ReactNode;
+  onCloseForm?: () => void;
 }
 
 interface CalendarDay {
@@ -31,7 +34,14 @@ function buildCalendar(monthStart: Date): CalendarDay[] {
   });
 }
 
-export function ScheduleCalendar({ schedules, onDelete, onRequestCreate }: Props) {
+export function ScheduleCalendar({
+  schedules,
+  onDelete,
+  onRequestCreate,
+  isFormOpen,
+  formContent,
+  onCloseForm,
+}: Props) {
   const today = useMemo(() => new Date(), []);
   const todayKey = useMemo(() => toLocalDateString(today), [today]);
   const [currentMonth, setCurrentMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
@@ -115,81 +125,101 @@ export function ScheduleCalendar({ schedules, onDelete, onRequestCreate }: Props
         </div>
       </div>
 
-      <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-4 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
-        <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
-          {weekdayLabels.map((day) => (
-            <span key={day} className="py-1">
-              {day}
-            </span>
-          ))}
-        </div>
-
-        <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
-          <div className="grid grid-cols-7 gap-[6px] sm:gap-2">
-            {monthDays.map(({ date, inCurrentMonth }) => {
-              const key = toLocalDateString(date);
-              const daySchedules = schedulesByDate[key];
-              return (
-                <CalendarDayCell
-                  key={key + inCurrentMonth}
-                  date={date}
-                  inCurrentMonth={inCurrentMonth}
-                  isToday={key === todayKey}
-                  isSelected={key === selectedDate}
-                  schedulesCount={daySchedules ? daySchedules.length : 0}
-                  previewTitle={daySchedules?.[0]?.title}
-                  onSelect={handleSelectDate}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm">
-        <div className="flex items-start justify-between gap-2">
-          <div className="space-y-0.5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>
-            <p className="text-base font-semibold text-[var(--color-text-primary)]">
-              {parseLocalDateString(selectedDate).toLocaleDateString(undefined, {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </div>
-          <span className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] shadow-sm">
-            {selectedDateItems.length} item{selectedDateItems.length === 1 ? "" : "s"}
-          </span>
-        </div>
-
-        <div className="mt-2 space-y-2">
-          {selectedDateItems.length === 0 && (
-            <div className="rounded-lg border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 text-sm text-[var(--color-text-muted)]">
-              No schedule entries for this day.
+      <div className={isFormOpen ? "grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]" : "space-y-3"}>
+        {isFormOpen && formContent && (
+          <div className="space-y-2 lg:sticky lg:top-4">
+            <div className="flex items-center justify-end gap-2 lg:justify-between">
+              <span className="text-sm font-semibold text-[var(--color-text-primary)]">Add to Schedule</span>
+              <button
+                onClick={onCloseForm}
+                className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
+                aria-label="Close schedule form"
+              >
+                Close
+              </button>
             </div>
-          )}
+            {formContent}
+          </div>
+        )}
 
-          {selectedDateItems.map((entry) => (
-            <article
-              key={entry.id}
-              className="flex flex-col gap-1.5 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-0.5">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{entry.time}</p>
-                  <h3 className="text-base font-semibold text-[var(--color-text-primary)]">{entry.title}</h3>
-                </div>
-                <button
-                  onClick={() => onDelete(entry.id)}
-                  className="self-start rounded-full border border-transparent bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600 shadow-sm transition hover:bg-rose-100 focus-visible:ring-2 focus-visible:ring-rose-500 dark:bg-rose-950/40 dark:text-rose-200"
-                >
-                  Delete
-                </button>
+        <div className={`space-y-3 ${isFormOpen ? "lg:max-h-[760px] lg:overflow-y-auto lg:pr-1" : ""}`}>
+          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-4 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
+            <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+              {weekdayLabels.map((day) => (
+                <span key={day} className="py-1">
+                  {day}
+                </span>
+              ))}
+            </div>
+
+            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
+              <div className="grid grid-cols-7 gap-[6px] sm:gap-2">
+                {monthDays.map(({ date, inCurrentMonth }) => {
+                  const key = toLocalDateString(date);
+                  const daySchedules = schedulesByDate[key];
+                  return (
+                    <CalendarDayCell
+                      key={key + inCurrentMonth}
+                      date={date}
+                      inCurrentMonth={inCurrentMonth}
+                      isToday={key === todayKey}
+                      isSelected={key === selectedDate}
+                      schedulesCount={daySchedules ? daySchedules.length : 0}
+                      previewTitle={daySchedules?.[0]?.title}
+                      onSelect={handleSelectDate}
+                    />
+                  );
+                })}
               </div>
-              {entry.notes && <p className="text-sm text-[var(--color-text-muted)]">{entry.notes}</p>}
-            </article>
-          ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm">
+            <div className="flex items-start justify-between gap-2">
+              <div className="space-y-0.5">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>
+                <p className="text-base font-semibold text-[var(--color-text-primary)]">
+                  {parseLocalDateString(selectedDate).toLocaleDateString(undefined, {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
+              <span className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] shadow-sm">
+                {selectedDateItems.length} item{selectedDateItems.length === 1 ? "" : "s"}
+              </span>
+            </div>
+
+            <div className="mt-2 space-y-2">
+              {selectedDateItems.length === 0 && (
+                <div className="rounded-lg border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 text-sm text-[var(--color-text-muted)]">
+                  No schedule entries for this day.
+                </div>
+              )}
+
+              {selectedDateItems.map((entry) => (
+                <article
+                  key={entry.id}
+                  className="flex flex-col gap-1.5 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 shadow-sm"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-0.5">
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{entry.time}</p>
+                      <h3 className="text-base font-semibold text-[var(--color-text-primary)]">{entry.title}</h3>
+                    </div>
+                    <button
+                      onClick={() => onDelete(entry.id)}
+                      className="self-start rounded-full border border-transparent bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600 shadow-sm transition hover:bg-rose-100 focus-visible:ring-2 focus-visible:ring-rose-500 dark:bg-rose-950/40 dark:text-rose-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  {entry.notes && <p className="text-sm text-[var(--color-text-muted)]">{entry.notes}</p>}
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

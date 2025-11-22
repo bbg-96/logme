@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import { parseLocalDateString, toLocalDateString } from "@/lib/date";
 import { Priority, Task } from "@/lib/types";
 
@@ -15,9 +15,20 @@ interface Props {
   onToggleComplete: (id: string) => void;
   onDelete: (id: string) => void;
   onRequestCreate?: () => void;
+  isFormOpen?: boolean;
+  formContent?: ReactNode;
+  onCloseForm?: () => void;
 }
 
-export function TaskList({ tasks, onToggleComplete, onDelete, onRequestCreate }: Props) {
+export function TaskList({
+  tasks,
+  onToggleComplete,
+  onDelete,
+  onRequestCreate,
+  isFormOpen,
+  formContent,
+  onCloseForm,
+}: Props) {
   const [sortBy, setSortBy] = useState<"priority" | "dueDate" | "createdAt">("priority");
   const [filter, setFilter] = useState<"all" | "high" | "today" | "incomplete">("all");
 
@@ -100,7 +111,22 @@ export function TaskList({ tasks, onToggleComplete, onDelete, onRequestCreate }:
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-2.5">
+      {isFormOpen && formContent && (
+        <div className="sticky top-0 z-10 -mx-4 -mt-1 space-y-2 bg-[var(--color-bg-card)] px-4 py-2">
+          <div className="flex items-center justify-end gap-2">
+            <button
+              onClick={onCloseForm}
+              className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+              aria-label="Close task form"
+            >
+              Close
+            </button>
+          </div>
+          {formContent}
+        </div>
+      )}
+
+      <div className={`grid grid-cols-1 gap-2.5 ${isFormOpen ? "max-h-[560px] overflow-y-auto pr-1" : ""}`}>
         {filteredTasks.length === 0 && (
           <div className="rounded-xl border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-6 text-center text-sm text-[var(--color-text-muted)]">
             No tasks found for this view.

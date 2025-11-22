@@ -135,53 +135,29 @@ export default function HomePage() {
                   onToggleComplete={toggleTask}
                   onDelete={deleteTask}
                   onRequestCreate={() => setActiveForm("task")}
+                  isFormOpen={activeForm === "task"}
+                  onCloseForm={closeForm}
+                  formContent={<TaskForm onCreate={addTask} />}
                 />
               </div>
-
-              {activeForm === "task" && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-end gap-2">
-                    <button
-                      onClick={closeForm}
-                      className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                      aria-label="Close task form"
-                    >
-                      Close
-                    </button>
-                  </div>
-                  <TaskForm onCreate={addTask} />
-                </div>
-              )}
             </>
-              ) : (
-                <>
-                  <div
-                    className={`grid grid-cols-1 gap-4 transition-all duration-200 ${
-                      activeForm === "schedule" ? "scale-[0.99] -translate-y-0.5" : "scale-100 translate-y-0"
-                    }`}
-                    aria-expanded={activeForm === "schedule"}
-                  >
+          ) : (
+            <>
+              <div
+                className={`grid grid-cols-1 gap-4 transition-all duration-200 ${
+                  activeForm === "schedule" ? "scale-[0.99] -translate-y-0.5" : "scale-100 translate-y-0"
+                }`}
+                aria-expanded={activeForm === "schedule"}
+              >
                 <ScheduleCalendar
                   schedules={schedules}
                   onDelete={deleteSchedule}
                   onRequestCreate={() => setActiveForm("schedule")}
+                  isFormOpen={activeForm === "schedule"}
+                  onCloseForm={closeForm}
+                  formContent={<ScheduleForm onCreate={addSchedule} />}
                 />
               </div>
-
-              {activeForm === "schedule" && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-end gap-2">
-                    <button
-                      onClick={closeForm}
-                      className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                      aria-label="Close schedule form"
-                    >
-                      Close
-                    </button>
-                  </div>
-                  <ScheduleForm onCreate={addSchedule} />
-                </div>
-              )}
             </>
           )}
         </div>
