@@ -1,19 +1,48 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: theme(colors.slate.50);
-  --color-foreground: theme(colors.slate.900);
+  /* Base font families remain tied to the bundled Geist fonts */
   --color-primary: theme(colors.indigo.500);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/*
+  Theme tokens live here so both modes are clearly separated.
+  Components read from these CSS variables instead of hard-coded colors.
+*/
 :root {
   color-scheme: light;
+  --bg: #f9fafb;
+  --card: #ffffff;
+  --card-muted: #f3f4f6;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --muted: #9ca3af;
+  --border: #e5e7eb;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-strong: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --input: #ffffff;
+  --tab-inactive: #f3f4f6;
+  --tab-active: #ffffff;
 }
 
-:root.dark {
+:root.dark,
+[data-theme="dark"] {
+  /* Dark palette is isolated so light tokens never leak */
   color-scheme: dark;
+  --bg: #0d0d10;
+  --card: #0f1117;
+  --card-muted: #1f2937;
+  --text: #f9fafb;
+  --text-muted: #a1a1aa;
+  --muted: #71717a;
+  --border: #2a2a2d;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-strong: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --input: #0f1117;
+  --tab-inactive: #1f2937;
+  --tab-active: #374151;
 }
 
 * {
@@ -23,21 +52,79 @@
 body {
   font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
   min-height: 100vh;
-  background: transparent;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
-.tab-button {
-  @apply relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition hover:shadow-sm;
-}
-
+/* Card shell used across dashboard containers */
 .card-surface {
-  @apply rounded-2xl bg-white/80 shadow-lg shadow-slate-200/50 ring-1 ring-slate-200/80 backdrop-blur dark:bg-slate-900/70 dark:shadow-black/40 dark:ring-slate-800;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-soft);
 }
 
-input, textarea, select {
-  @apply focus:outline-none focus:ring-2 focus:ring-primary/70;
+/* Shared tab styling keeps layout consistent while colors come from tokens */
+.tab-button {
+  @apply relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-indigo-500;
+  color: var(--text-muted);
+  background-color: var(--tab-inactive);
+  border: 1px solid var(--border);
 }
 
+.tab-button.is-active {
+  color: var(--text);
+  background-color: var(--tab-active);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Input primitives stay visually identical aside from color tokens */
+.input-field,
+textarea,
+select,
+input[type="text"],
+input[type="date"],
+input[type="time"] {
+  @apply box-border w-full rounded-xl border text-[14px] leading-[1.4] shadow-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500/70;
+  background-color: var(--input);
+  border-color: var(--border);
+  color: var(--text);
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+textarea,
+select,
+input[type="text"] {
+  min-height: 42px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/*
+  Fixed height/line-height/padding for date & time inputs prevent clipped text
+  and leave room for the native picker icons.
+*/
+input[type="date"],
+input[type="time"] {
+  height: 42px;
+  font-size: 14px;
+  line-height: 1.4;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-right: 2.5rem;
+  appearance: none;
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+
+/* Badge + gradient helpers */
 :root {
   --primary: 99 102 241; /* indigo-500 */
 }
