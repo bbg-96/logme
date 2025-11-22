@@ -131,7 +131,10 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-2 w-full max-w-sm rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-4 shadow-xl">
+        <div
+          className="absolute left-0 z-20 mt-2 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 shadow-xl"
+          style={{ width: 280 }}
+        >
           <div className="mb-3 flex items-center justify-between text-sm text-[var(--color-text-primary)]">
             <button
               type="button"
@@ -158,16 +161,18 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
             </button>
           </div>
 
-          <div className="grid grid-cols-7 gap-2 text-center text-xs font-semibold uppercase text-[var(--color-text-muted)]">
+          <div className="grid grid-cols-7 text-center text-xs font-medium text-[var(--color-text-muted)]">
             {dayNames.map((day) => (
-              <span key={day}>{day}</span>
+              <div key={day} className="w-full">
+                {day}
+              </div>
             ))}
           </div>
 
-          <div className="mt-2 grid grid-cols-7 gap-2 text-sm">
+          <div className="mt-2 grid grid-cols-7 gap-1 text-sm">
             {days.map((day, index) => {
               if (!day) {
-                return <span key={index} />;
+                return <span key={index} className="block h-9" />;
               }
 
               const iso = `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
@@ -180,7 +185,7 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
                   type="button"
                   onClick={() => handleSelectDate(day)}
                   disabled={disabled}
-                  className={`h-10 rounded-lg border text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 ${
+                  className={`h-9 flex items-center justify-center rounded-md border text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/70 ${
                     isSelected
                       ? "border-transparent bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-200"
                       : "border-transparent text-[var(--color-text-primary)] hover:border-[color:var(--color-border-subtle)] hover:bg-[var(--color-bg-subtle)]"
