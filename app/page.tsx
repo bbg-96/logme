@@ -70,7 +70,7 @@ export default function HomePage() {
 
   const tabClass = (tab: "tasks" | "schedule") =>
     `tab-button ${activeTab === tab ? "is-active" : ""} ${
-      activeTab === tab ? "shadow-[0_10px_24px_var(--shadow-soft)]" : "hover:shadow-sm"
+      activeTab === tab ? "shadow-[0_10px_24px_var(--color-shadow-soft)]" : "hover:shadow-sm"
     }`;
 
   return (
@@ -94,13 +94,13 @@ export default function HomePage() {
             Schedule
           </button>
         </div>
-        <p className="text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">
+        <p className="text-xs font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
           {activeTab === "tasks" ? "Prioritize and complete" : "Plan your day"}
         </p>
       </div>
 
       {!isReady ? (
-        <div className="card-surface animate-pulse p-6 text-sm text-[var(--text-muted)]">
+        <div className="card-surface animate-pulse p-6 text-sm text-[var(--color-text-muted)]">
           Loading your dashboard...
         </div>
       ) : (
@@ -144,11 +144,11 @@ function SummaryCard({
   return (
     <div className="card-surface flex items-center justify-between p-4">
       <div>
-        <p className="text-sm font-medium text-[var(--text-muted)]">{label}</p>
-        <p className="text-3xl font-bold text-[var(--text)]">{primary}</p>
+        <p className="text-sm font-medium text-[var(--color-text-muted)]">{label}</p>
+        <p className="text-3xl font-bold text-[var(--color-text-primary)]">{primary}</p>
         <p className="text-xs font-semibold uppercase tracking-wide text-indigo-500">{description}</p>
       </div>
-      <div className="rounded-xl bg-gradient-to-br from-purple-300 via-blue-300 to-cyan-200 px-4 py-3 text-right text-slate-900 shadow-[0_12px_30px_var(--shadow-soft)] dark:from-indigo-500 dark:via-purple-500 dark:to-cyan-400 dark:text-white dark:shadow-[0_14px_32px_var(--shadow-strong)]">
+      <div className="rounded-xl bg-gradient-to-br from-purple-300 via-blue-300 to-cyan-200 px-4 py-3 text-right text-slate-900 shadow-[0_12px_30px_var(--color-shadow-soft)] dark:from-indigo-500 dark:via-purple-500 dark:to-cyan-400 dark:text-white dark:shadow-[0_14px_32px_var(--color-shadow-strong)]">
         <p className="text-sm font-medium">Snapshot</p>
         <p className="text-2xl font-bold">{accent}</p>
       </div>

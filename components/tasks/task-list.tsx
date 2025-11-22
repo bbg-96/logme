@@ -39,14 +39,14 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
   }, [filter, sortBy, tasks, today]);
 
   const filterTabClass = (key: string) =>
-    `tab-button ${filter === key ? "is-active shadow-[0_10px_24px_var(--shadow-soft)]" : "hover:shadow-sm"}`;
+    `tab-button ${filter === key ? "is-active shadow-[0_10px_24px_var(--color-shadow-soft)]" : "hover:shadow-sm"}`;
 
   return (
     <div className="card-surface space-y-4 p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-[var(--text)]">Tasks</h2>
-          <p className="text-sm text-[var(--text-muted)]">Sort, filter, and manage your personal to-dos.</p>
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Tasks</h2>
+          <p className="text-sm text-[var(--color-text-muted)]">Sort, filter, and manage your personal to-dos.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -81,7 +81,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
 
       <div className="grid grid-cols-1 gap-3">
         {filteredTasks.length === 0 && (
-          <div className="rounded-xl border border-dashed border-[color:var(--border)] bg-[var(--card-muted)] p-6 text-center text-sm text-[var(--text-muted)]">
+          <div className="rounded-xl border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-6 text-center text-sm text-[var(--color-text-muted)]">
             No tasks found for this view.
           </div>
         )}
@@ -89,7 +89,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
         {filteredTasks.map((task) => (
           <article
             key={task.id}
-            className="flex flex-col gap-4 rounded-xl border border-[color:var(--border)] bg-[var(--card)] p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)]"
+            className="flex flex-col gap-4 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-list-surface)] p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)]"
           >
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex items-start gap-3">
@@ -98,20 +98,20 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
                   type="checkbox"
                   checked={task.completed}
                   onChange={() => onToggleComplete(task.id)}
-                  className="mt-1 h-5 w-5 rounded border-[color:var(--border)] text-indigo-600 focus:ring-indigo-500"
+                  className="mt-1 h-5 w-5 rounded border-[color:var(--color-border-subtle)] text-indigo-600 focus:ring-indigo-500"
                 />
                 <div>
                   <label
                     htmlFor={`task-${task.id}`}
                     className={`text-base font-semibold ${
-                      task.completed ? "text-[var(--muted)] line-through" : "text-[var(--text)]"
+                      task.completed ? "text-[var(--color-text-muted)] line-through" : "text-[var(--color-text-primary)]"
                     }`}
                   >
                     {task.title}
                   </label>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-muted)]">
                     <PriorityBadge priority={task.priority} />
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--card-muted)] px-2 py-1">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-bg-subtle)] px-2 py-1">
                       Due {new Date(task.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                     </span>
                     {task.completed && <span className="text-emerald-500">Completed</span>}
@@ -129,7 +129,9 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
               </div>
             </div>
 
-            {task.notes && <p className="rounded-xl bg-[var(--card-muted)] px-3 py-2 text-sm text-[var(--text)]">{task.notes}</p>}
+            {task.notes && (
+              <p className="rounded-xl bg-[var(--color-bg-subtle)] px-3 py-2 text-sm text-[var(--color-text-primary)]">{task.notes}</p>
+            )}
           </article>
         ))}
       </div>
@@ -139,12 +141,12 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
 
 function PriorityBadge({ priority }: { priority: Priority }) {
   const classes: Record<Priority, string> = {
-    high: "bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-200",
-    medium: "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-200",
-    low: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200",
+    high: "badge-high",
+    medium: "badge-medium",
+    low: "badge-low",
   };
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${classes[priority]}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${classes[priority]}`}>
       {priority === "high" && "⬆"}
       {priority === "medium" && "⬅"}
       {priority === "low" && "⬇"}

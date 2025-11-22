@@ -22,10 +22,10 @@ export function Greeting() {
   return (
     <div className="flex flex-col gap-2">
       <p className="text-sm font-semibold uppercase tracking-wide text-indigo-500">{dateLabel}</p>
-      <h1 className="text-3xl font-bold text-[var(--text)] sm:text-4xl">
+      <h1 className="text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl">
         {greeting}, <span className="text-gradient">let’s get things done.</span>
       </h1>
-      <p className="text-base text-[var(--text-muted)]">
+      <p className="text-base text-[var(--color-text-muted)]">
         Manage tasks, plan your schedule, and stay on top of what matters.
       </p>
     </div>
