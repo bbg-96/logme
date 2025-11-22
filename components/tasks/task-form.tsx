@@ -38,11 +38,11 @@ export function TaskForm({ onCreate }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="card-surface space-y-4 p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-strong)]"
+      className="card-surface space-y-3.5 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-strong)]"
       aria-label="Create a new task"
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Create Task</h2>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">New item</p>
         </div>
@@ -51,7 +51,7 @@ export function TaskForm({ onCreate }: Props) {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Title
           <input
@@ -66,7 +66,7 @@ export function TaskForm({ onCreate }: Props) {
         <DateField label="Due date" value={dueDate} onChange={setDueDate} min={today} />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Priority
           <select
