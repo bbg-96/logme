@@ -99,9 +99,7 @@ body {
 .input-field,
 textarea,
 select,
-input[type="text"],
-input[type="date"],
-input[type="time"] {
+input[type="text"] {
   @apply box-border w-full rounded-xl border text-[14px] leading-[1.4] shadow-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500/70;
   background-color: var(--color-input);
   border-color: var(--color-border-subtle);
@@ -116,35 +114,6 @@ select,
 input[type="text"] {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-/*
-  Fixed height/line-height/padding for date & time inputs prevent clipped text
-  and leave room for the native picker icons.
-*/
-input[type="date"],
-input[type="time"] {
-  appearance: none;
-  -webkit-appearance: none;
-  font-size: 14px !important;
-  line-height: 1.4 !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  padding: 0 0.75rem !important;
-  padding-right: 2.5rem !important;
-  background-position: right 0.75rem center;
-  background-repeat: no-repeat;
-}
-
-input[type="date"]::-webkit-date-and-time-value,
-input[type="time"]::-webkit-date-and-time-value {
-  min-height: 44px;
-  padding: 4px 0;
-}
-
-::-webkit-calendar-picker-indicator {
-  padding: 0 !important;
-  margin-left: 6px !important;
 }
 
 input::placeholder,

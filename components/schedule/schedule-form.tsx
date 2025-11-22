@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { DateField } from "../common/date-field";
+import { TimeField } from "../common/time-field";
 
 interface Props {
   onCreate: (input: { title: string; date: string; time: string; notes: string }) => void;
@@ -55,30 +57,11 @@ export function ScheduleForm({ onCreate }: Props) {
           />
         </label>
 
-        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
-          Date
-          <input
-            required
-            type="date"
-            min={today}
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-            className="input-field"
-          />
-        </label>
+        <DateField label="Date" value={date} onChange={setDate} min={today} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
-          Time
-          <input
-            required
-            type="time"
-            value={time}
-            onChange={(event) => setTime(event.target.value)}
-            className="input-field"
-          />
-        </label>
+        <TimeField label="Time" value={time} onChange={setTime} />
 
         <label className="space-y-1 text-sm font-medium text-[var(--color-text-primary)]">
           Notes
