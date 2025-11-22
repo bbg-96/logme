@@ -17,7 +17,6 @@ interface Props {
   onRequestCreate?: () => void;
   isFormOpen?: boolean;
   formContent?: ReactNode;
-  onCloseForm?: () => void;
 }
 
 export function TaskList({
@@ -27,7 +26,6 @@ export function TaskList({
   onRequestCreate,
   isFormOpen,
   formContent,
-  onCloseForm,
 }: Props) {
   const [sortBy, setSortBy] = useState<"priority" | "dueDate" | "createdAt">("priority");
   const [filter, setFilter] = useState<"all" | "high" | "today" | "incomplete">("all");
@@ -112,16 +110,7 @@ export function TaskList({
       </div>
 
       {isFormOpen && formContent && (
-        <div className="sticky top-0 z-10 -mx-4 -mt-1 space-y-2 bg-[var(--color-bg-card)] px-4 py-2">
-          <div className="flex items-center justify-end gap-2">
-            <button
-              onClick={onCloseForm}
-              className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-              aria-label="Close task form"
-            >
-              Close
-            </button>
-          </div>
+        <div className="sticky top-0 z-10 -mx-4 -mt-1 bg-[var(--color-bg-card)] px-4 pb-2 pt-1">
           {formContent}
         </div>
       )}

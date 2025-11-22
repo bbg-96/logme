@@ -11,7 +11,6 @@ interface Props {
   onRequestCreate?: () => void;
   isFormOpen?: boolean;
   formContent?: ReactNode;
-  onCloseForm?: () => void;
 }
 
 interface CalendarDay {
@@ -40,7 +39,6 @@ export function ScheduleCalendar({
   onRequestCreate,
   isFormOpen,
   formContent,
-  onCloseForm,
 }: Props) {
   const today = useMemo(() => new Date(), []);
   const todayKey = useMemo(() => toLocalDateString(today), [today]);
@@ -127,19 +125,7 @@ export function ScheduleCalendar({
 
       <div className={isFormOpen ? "grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]" : "space-y-3"}>
         {isFormOpen && formContent && (
-          <div className="space-y-2 lg:sticky lg:top-4">
-            <div className="flex items-center justify-end gap-2 lg:justify-between">
-              <span className="text-sm font-semibold text-[var(--color-text-primary)]">Add to Schedule</span>
-              <button
-                onClick={onCloseForm}
-                className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
-                aria-label="Close schedule form"
-              >
-                Close
-              </button>
-            </div>
-            {formContent}
-          </div>
+          <div className="lg:sticky lg:top-4">{formContent}</div>
         )}
 
         <div className={`space-y-3 ${isFormOpen ? "lg:max-h-[760px] lg:overflow-y-auto lg:pr-1" : ""}`}>

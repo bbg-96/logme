@@ -136,8 +136,7 @@ export default function HomePage() {
                   onDelete={deleteTask}
                   onRequestCreate={() => setActiveForm("task")}
                   isFormOpen={activeForm === "task"}
-                  onCloseForm={closeForm}
-                  formContent={<TaskForm onCreate={addTask} />}
+                  formContent={<TaskForm onCreate={addTask} onClose={closeForm} />}
                 />
               </div>
             </>
@@ -154,8 +153,7 @@ export default function HomePage() {
                   onDelete={deleteSchedule}
                   onRequestCreate={() => setActiveForm("schedule")}
                   isFormOpen={activeForm === "schedule"}
-                  onCloseForm={closeForm}
-                  formContent={<ScheduleForm onCreate={addSchedule} />}
+                  formContent={<ScheduleForm onCreate={addSchedule} onClose={closeForm} />}
                 />
               </div>
             </>
