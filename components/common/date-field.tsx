@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { parseLocalDateString, toLocalDateString } from "@/lib/date";
 
 type NullableString = string | null;
 
@@ -20,14 +21,14 @@ function pad(value: number) {
 
 function formatDateDisplay(value: NullableString) {
   if (!value) return "Select date";
-  const date = new Date(value);
+  const date = parseLocalDateString(value);
   if (Number.isNaN(date.getTime())) return value;
   return `${date.getFullYear()}. ${pad(date.getMonth() + 1)}. ${pad(date.getDate())}`;
 }
 
 function isBeforeMin(date: Date, min?: string) {
   if (!min) return false;
-  const minDate = new Date(min);
+  const minDate = parseLocalDateString(min);
   if (Number.isNaN(minDate.getTime())) return false;
   return date.getTime() < minDate.getTime();
 }
@@ -41,7 +42,7 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
 
   const baseDate = useMemo(() => {
     if (!value) return new Date();
-    const parsed = new Date(value);
+    const parsed = parseLocalDateString(value);
     if (Number.isNaN(parsed.getTime())) return new Date();
     return parsed;
   }, [value]);
@@ -138,8 +139,7 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
 
   const handleSelectDate = (date: Date) => {
     if (isBeforeMin(date, min)) return;
-    const iso = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-    onChange(iso);
+    onChange(toLocalDateString(date));
     setMonthOffset(0);
     setOpen(false);
   };
@@ -219,13 +219,13 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
                     return <span key={index} className="block h-9" />;
                   }
 
-                  const iso = `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
-                  const isSelected = value === iso;
+                  const localDate = toLocalDateString(day);
+                  const isSelected = value === localDate;
                   const disabled = isBeforeMin(day, min);
 
                   return (
                     <button
-                      key={iso}
+                      key={localDate}
                       type="button"
                       onClick={() => handleSelectDate(day)}
                       disabled={disabled}

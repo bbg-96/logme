@@ -25,9 +25,6 @@ export function Greeting() {
       <h1 className="text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl">
         {greeting}, <span className="text-gradient">let’s get things done.</span>
       </h1>
-      <p className="text-base text-[var(--color-text-muted)]">
-        Manage tasks, plan your schedule, and stay on top of what matters.
-      </p>
     </div>
   );
 }
