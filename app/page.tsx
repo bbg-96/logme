@@ -59,11 +59,9 @@ export default function HomePage() {
   const deleteSchedule = (id: string) => setSchedules((current) => current.filter((entry) => entry.id !== id));
 
   const stats = useMemo(() => {
-    const completed = tasks.filter((task) => task.completed).length;
+    const incompleteTasks = tasks.filter((task) => !task.completed).length;
     return {
-      totalTasks: tasks.length,
-      completedTasks: completed,
-      pendingTasks: tasks.length - completed,
+      tasksRemaining: incompleteTasks,
       scheduleCount: schedules.length,
     };
   }, [schedules.length, tasks]);
@@ -81,8 +79,8 @@ export default function HomePage() {
       </header>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <SummaryCard label="Tasks" primary={stats.totalTasks} accent={stats.completedTasks} description="Created" />
-        <SummaryCard label="Schedule" primary={stats.scheduleCount} accent={stats.pendingTasks} description="Upcoming" />
+        <SummaryCard label="Tasks" primary={stats.tasksRemaining} description="Incomplete" />
+        <SummaryCard label="Schedule" primary={stats.scheduleCount} description="Upcoming" />
       </section>
 
       <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-2">
@@ -133,12 +131,10 @@ export default function HomePage() {
 function SummaryCard({
   label,
   primary,
-  accent,
   description,
 }: {
   label: string;
   primary: number;
-  accent: number;
   description: string;
 }) {
   return (
@@ -146,12 +142,10 @@ function SummaryCard({
       <div>
         <p className="text-sm font-medium text-[var(--color-text-muted)]">{label}</p>
         <p className="text-3xl font-bold text-[var(--color-text-primary)]">{primary}</p>
-        <p className="text-xs font-semibold uppercase tracking-wide text-indigo-500">{description}</p>
       </div>
-      <div className="rounded-xl bg-gradient-to-br from-purple-300 via-blue-300 to-cyan-200 px-4 py-3 text-right text-slate-900 shadow-[0_12px_30px_var(--color-shadow-soft)] dark:from-indigo-500 dark:via-purple-500 dark:to-cyan-400 dark:text-white dark:shadow-[0_14px_32px_var(--color-shadow-strong)]">
-        <p className="text-sm font-medium">Snapshot</p>
-        <p className="text-2xl font-bold">{accent}</p>
-      </div>
+      <span className="rounded-full bg-[var(--color-bg-subtle)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+        {description}
+      </span>
     </div>
   );
 }

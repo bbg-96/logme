@@ -52,7 +52,7 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
 
   return (
     <div className="card-surface space-y-4 p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Tasks</h2>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Overview</p>
@@ -100,25 +100,25 @@ export function TaskList({ tasks, onToggleComplete, onDelete }: Props) {
             key={task.id}
             className="flex flex-col gap-4 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-list-surface)] p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)]"
           >
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-              <div className="flex items-start gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
                 <input
                   id={`task-${task.id}`}
                   type="checkbox"
                   checked={task.completed}
                   onChange={() => onToggleComplete(task.id)}
-                  className="mt-1 h-5 w-5 rounded border-[color:var(--color-border-subtle)] text-indigo-600 focus:ring-indigo-500"
+                  className="h-5 w-5 rounded border-[color:var(--color-border-subtle)] text-indigo-600 focus:ring-indigo-500"
                 />
-                <div>
+                <div className="space-y-1">
                   <label
                     htmlFor={`task-${task.id}`}
                     className={`text-base font-semibold ${
                       task.completed ? "text-[var(--color-text-muted)] line-through" : "text-[var(--color-text-primary)]"
                     }`}
-                  >
+                    >
                     {task.title}
                   </label>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-muted)]">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-muted)]">
                     <PriorityBadge priority={task.priority} />
                     <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-bg-subtle)] px-2 py-1">
                       Due {parseLocalDateString(task.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
