@@ -1,53 +1,4 @@
-export default function Home() {
-  return (
-    <div className="space-y-6">
-      <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
-        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">LogMe</p>
-        <h1 className="mt-2 text-3xl font-semibold text-slate-900">Welcome to LogMe</h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-600">
-          Log in or sign up to access your user-specific dashboard. Every workspace lives under /u/&lt;username&gt;/..., fully isolated by
-          JWT-authenticated routes and PostgreSQL rows scoped to your user.
-        </p>
-        <div className="mt-6 flex gap-3">
-          <a className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-slate-800" href="/login">
-            Sign in
-          </a>
-          <a className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-slate-300" href="/signup">
-            Create account
-          </a>
-        </div>
-      </section>
-
-      <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-        <h2 className="text-lg font-semibold text-slate-900">How it works</h2>
-        <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-700">
-          <li>Sign up to create a JWT-backed session stored in an HttpOnly cookie.</li>
-          <li>Get redirected to /u/&lt;username&gt;/today where all data loads with your user_id.</li>
-          <li>APIs validate the cookie and forbid access to other users&apos; directories.</li>
-        </ul>
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
-
-type DbStatus = "checking" | "ok" | "error";
-type EntryState = "loading" | "loaded" | "error";
-
-type TodayEntry = {
-  id: number;
-  title: string | null;
-  content: string;
-  createdAt: string;
-};
-
-type TodayApiResponse = {
-  entry: TodayEntry | null;
-  error?: string;
-};
-
-type DbCheckResponse = {
-  ok: boolean;
-  error?: string;
-};
+import { Dispatch, SetStateAction } from "react";
 
 const moods = [
   { label: "Great", emoji: "😄" },
@@ -64,7 +15,10 @@ const scheduleItems = [
   { time: "16:30", title: "Wrap-up notes", description: "Summarize today" },
 ];
 
-const statusStyles: Record<DbStatus, { bg: string; text: string; label: string }> = {
+const statusStyles: Record<
+  "checking" | "ok" | "error",
+  { bg: string; text: string; label: string }
+> = {
   checking: {
     label: "Checking DB",
     bg: "bg-amber-100",
@@ -91,65 +45,34 @@ const formatDate = (value: string) =>
     minute: "2-digit",
   }).format(new Date(value));
 
-export default function Home() {
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
-  const [dbStatus, setDbStatus] = useState<DbStatus>("checking");
-  const [latestEntry, setLatestEntry] = useState<TodayEntry | null>(null);
-  const [entryState, setEntryState] = useState<EntryState>("loading");
-  const [entryError, setEntryError] = useState<string | null>(null);
+type TodayEntry = {
+  id: number;
+  title: string | null;
+  content: string;
+  createdAt: string;
+};
 
-  const todayLabel = useMemo(
-    () =>
-      new Date().toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      }),
-    []
-  );
+type Props = {
+  username: string;
+  todayLabel: string;
+  selectedMood: string | null;
+  setSelectedMood: Dispatch<SetStateAction<string | null>>;
+  dbStatus: "checking" | "ok" | "error";
+  latestEntry: TodayEntry | null;
+  entryState: "loading" | "loaded" | "error";
+  entryError: string | null;
+};
 
-  useEffect(() => {
-    const fetchDbStatus = async () => {
-      try {
-        const response = await fetch("/api/db-check", { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("DB check failed");
-        }
-        const data: DbCheckResponse = await response.json();
-        setDbStatus(data.ok ? "ok" : "error");
-      } catch (error) {
-        console.error("Failed to check DB status", error);
-        setDbStatus("error");
-      }
-    };
-
-    fetchDbStatus();
-  }, []);
-
-  useEffect(() => {
-    const fetchLatestEntry = async () => {
-      setEntryState("loading");
-      setEntryError(null);
-      try {
-        const response = await fetch("/api/today", { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("Failed to fetch latest entry");
-        }
-
-        const data: TodayApiResponse = await response.json();
-        setLatestEntry(data.entry ?? null);
-        setEntryState("loaded");
-      } catch (error) {
-        console.error("Failed to fetch latest log entry", error);
-        setEntryError("Could not load your latest log. Please try again.");
-        setEntryState("error");
-      }
-    };
-
-    fetchLatestEntry();
-  }, []);
-
+export function TodayPageShell({
+  username,
+  todayLabel,
+  selectedMood,
+  setSelectedMood,
+  dbStatus,
+  latestEntry,
+  entryState,
+  entryError,
+}: Props) {
   const renderLatestEntry = () => {
     if (entryState === "loading") {
       return <p className="text-sm text-slate-500">Loading latest log...</p>;
@@ -180,7 +103,7 @@ export default function Home() {
       <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Today</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{username}&apos;s workspace</p>
             <h1 className="text-2xl font-semibold text-slate-900">{todayLabel}</h1>
           </div>
           <div className="flex items-center gap-3">
