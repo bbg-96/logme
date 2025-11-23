@@ -135,7 +135,7 @@ export function ScheduleCalendar({
             </div>
 
             <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[2px] sm:p-0.5 lg:p-1">
-              <div className="grid grid-cols-7 gap-x-0.5 gap-y-1">
+              <div className="grid grid-cols-7 gap-x-1 gap-y-2">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
