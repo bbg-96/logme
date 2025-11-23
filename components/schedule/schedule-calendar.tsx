@@ -139,7 +139,7 @@ export function ScheduleCalendar({
             </div>
 
             <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
-              <div className="grid grid-cols-7 gap-[6px] sm:gap-2">
+              <div className="grid grid-cols-7 gap-[4px] sm:gap-2 auto-rows-[minmax(82px,1fr)]">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
