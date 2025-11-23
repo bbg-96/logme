@@ -91,8 +91,8 @@ export default function HomePage() {
     }`;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-[1080px] flex-col gap-6 px-4 pb-16 pt-8 sm:px-6 lg:px-8">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <main className="mx-auto flex min-h-screen w-full max-w-[1080px] flex-col gap-5 px-4 pb-12 pt-6 sm:px-6 lg:px-8">
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Greeting />
         <ThemeToggle />
       </header>
@@ -102,7 +102,7 @@ export default function HomePage() {
         <SummaryCard label="Schedule" primary={stats.scheduleCount} description="Upcoming" />
       </section>
 
-      <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-2">
+      <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-1.5">
         <div className="flex items-center gap-2">
           <button onClick={() => handleTabChange("tasks")} className={tabClass("tasks")}>
             Tasks
@@ -174,12 +174,12 @@ function SummaryCard({
   description: string;
 }) {
   return (
-    <div className="card-surface flex items-center justify-between p-3.5 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+    <div className="card-surface flex items-center justify-between p-3 shadow-[0_6px_18px_rgba(15,23,42,0.05)]">
       <div className="leading-tight">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{label}</p>
-        <p className="text-3xl font-bold text-[var(--color-text-primary)]">{primary}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{label}</p>
+        <p className="text-[28px] font-bold leading-snug text-[var(--color-text-primary)]">{primary}</p>
       </div>
-      <span className="rounded-full bg-[var(--color-bg-subtle)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+      <span className="rounded-full bg-[var(--color-bg-subtle)] px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
         {description}
       </span>
     </div>

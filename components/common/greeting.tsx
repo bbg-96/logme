@@ -20,9 +20,9 @@ export function Greeting() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-500">{dateLabel}</p>
-      <h1 className="text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl">
+    <div className="flex flex-col gap-1.5">
+      <p className="text-xs font-semibold uppercase tracking-wide text-indigo-500">{dateLabel}</p>
+      <h1 className="text-[26px] font-bold leading-tight text-[var(--color-text-primary)] sm:text-3xl">
         {greeting}, <span className="text-gradient">let’s get things done.</span>
       </h1>
     </div>
