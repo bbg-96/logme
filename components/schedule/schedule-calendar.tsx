@@ -92,7 +92,7 @@ export function ScheduleCalendar({
   const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="card-surface space-y-3 p-3 sm:space-y-4 sm:p-4">
+    <div className="card-surface space-y-2.5 p-2.5 sm:space-y-3.5 sm:p-3.5">
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div className="space-y-0.5">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Schedule</h2>
@@ -111,7 +111,7 @@ export function ScheduleCalendar({
         </div>
       </div>
 
-      <div className={isFormOpen ? "grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]" : "space-y-3"}>
+      <div className={isFormOpen ? "grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]" : "space-y-2.5"}>
         {isFormOpen && formContent && (
           <div className="lg:sticky lg:top-4">{formContent}</div>
         )}
@@ -123,7 +123,7 @@ export function ScheduleCalendar({
               : "lg:grid lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-start lg:gap-4 lg:space-y-0"
           }`}
         >
-          <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-3 lg:p-4">
+          <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-2.5 lg:p-3.5">
             <CalendarHeader currentMonth={currentMonth} onChangeMonth={changeMonth} onSelectMonth={changeMonthDirectWithYear} />
 
             <div className="grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] sm:text-xs">
@@ -134,7 +134,7 @@ export function ScheduleCalendar({
               ))}
             </div>
 
-            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[3px] sm:p-1 lg:p-1.5">
+            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[2px] sm:p-0.5 lg:p-1">
               <div className="grid grid-cols-7 gap-x-0.5 gap-y-1">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
