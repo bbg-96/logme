@@ -129,7 +129,7 @@ export function ScheduleCalendar({
         )}
 
         <div className={`space-y-3 ${isFormOpen ? "lg:max-h-[700px] lg:overflow-y-auto lg:pr-1" : ""}`}>
-          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-4">
+          <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-4">
             <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
               {weekdayLabels.map((day) => (
                 <span key={day} className="py-1">
@@ -138,8 +138,8 @@ export function ScheduleCalendar({
               ))}
             </div>
 
-            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
-              <div className="grid grid-cols-7 gap-[4px] sm:gap-2">
+            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-1.5">
+              <div className="grid grid-cols-7 gap-[4px] sm:gap-1.5">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
