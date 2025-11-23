@@ -29,7 +29,7 @@ export function CalendarDayCell({
     <button
       onClick={() => onSelect(date)}
       className={cx(
-        "group relative flex aspect-[5/3] flex-col items-center justify-between rounded-xl border text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+        "group relative flex flex-col items-center justify-between rounded-xl border px-2 py-2 text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
         "bg-[var(--color-bg-subtle)] text-[var(--color-text-primary)] border border-[rgba(148,163,184,0.25)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]",
         "hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] hover:bg-[var(--color-bg-card)]",
         !inCurrentMonth && "opacity-60",
@@ -39,12 +39,12 @@ export function CalendarDayCell({
       )}
       aria-label={`View schedules for ${date.toDateString()}`}
     >
-      <div className="flex w-full flex-1 flex-col items-center justify-center gap-1 pb-1">
+      <div className="flex w-full flex-1 flex-col items-center gap-1 pb-1 pt-0.5">
         <span
           className={cx(
-            "flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold sm:h-8 sm:w-8",
+            "flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-semibold",
             isSelected
-              ? "bg-indigo-600 text-white"
+              ? "bg-indigo-600 text-white shadow-md"
               : "bg-[var(--color-bg-card)] text-[var(--color-text-primary)]",
             !inCurrentMonth && "text-[var(--color-text-muted)]",
           )}
@@ -63,7 +63,7 @@ export function CalendarDayCell({
         </p>
       </div>
 
-      <div className="mb-1.5 flex w-full items-center justify-center gap-1">
+      <div className="mb-1 flex w-full items-center justify-center gap-1">
         {Array.from({ length: Math.min(schedulesCount, 3) }).map((_, index) => (
           <span
             key={index}
