@@ -27,7 +27,7 @@ export function CalendarDayCell({
     <button
       onClick={() => onSelect(date)}
       className={cx(
-        "group relative mx-auto flex h-16 w-full flex-col items-center justify-center gap-0.5 overflow-hidden rounded-2xl border p-1 text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+        "group relative mx-auto flex h-[4.25rem] w-full flex-col items-center justify-center gap-0.5 overflow-hidden rounded-2xl border p-1 text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
         "bg-[var(--color-bg-subtle)] text-[var(--color-text-primary)] border border-[rgba(148,163,184,0.25)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]",
         "hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] hover:bg-[var(--color-bg-card)]",
         !inCurrentMonth && "opacity-60",
@@ -40,7 +40,7 @@ export function CalendarDayCell({
       <div className="flex flex-col items-center">
         <span
           className={cx(
-            "flex h-7 w-7 items-center justify-center rounded-lg text-sm font-medium",
+            "flex h-7 w-7 items-center justify-center rounded-lg text-sm font-medium -mt-0.5",
             isSelected
               ? "bg-indigo-500 text-white text-sm font-semibold shadow"
               : "bg-white/80 text-[var(--color-text-primary)]",
