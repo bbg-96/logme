@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CalendarHeaderProps {
   currentMonth: Date;
@@ -40,40 +41,33 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
     [currentMonth],
   );
 
+  const toggleMonthPicker = () => setIsPickerOpen((open) => !open);
+
   return (
     <div ref={containerRef} className="relative flex items-center justify-center">
       <div className="flex items-center justify-center gap-2">
         <button
           type="button"
           onClick={() => onChangeMonth(-1)}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           aria-label="Previous month"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
         >
-          <span>&lt;</span>
+          <ChevronLeft className="h-4 w-4" />
         </button>
 
         <div className="relative">
           <button
             type="button"
-            onClick={() => setIsPickerOpen((open) => !open)}
-            className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            onClick={toggleMonthPicker}
+            className="inline-flex items-center gap-1 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] bg-white shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             aria-haspopup="dialog"
             aria-expanded={isPickerOpen}
           >
             <span>{monthLabel}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+            <ChevronDown
               className={`h-4 w-4 transition-transform ${isPickerOpen ? "rotate-180" : "rotate-0"}`}
               aria-hidden
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.25a.75.75 0 01-1.06 0l-4.25-4.25a.75.75 0 01.02-1.06z"
-                clipRule="evenodd"
-              />
-            </svg>
+            />
           </button>
 
           {isPickerOpen && (
@@ -126,10 +120,10 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
         <button
           type="button"
           onClick={() => onChangeMonth(1)}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           aria-label="Next month"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
         >
-          <span>&gt;</span>
+          <ChevronRight className="h-4 w-4" />
         </button>
       </div>
     </div>
