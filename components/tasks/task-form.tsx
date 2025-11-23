@@ -76,7 +76,7 @@ export function TaskForm({ onCreate, onClose }: Props) {
           />
         </label>
 
-        <DateField label="Due date" value={dueDate} onChange={setDueDate} min={today} />
+        <DateField label="Due date" value={dueDate} onChange={(value) => setDueDate(value ?? today)} min={today} />
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
