@@ -42,21 +42,21 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
 
   return (
     <div ref={containerRef} className="relative flex items-center justify-center">
-      <div className="inline-flex items-center justify-center gap-1">
+      <div className="flex items-center justify-center gap-2">
         <button
           type="button"
           onClick={() => onChangeMonth(-1)}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           aria-label="Previous month"
         >
-          &lt;
+          <span>&lt;</span>
         </button>
 
         <div className="relative">
           <button
             type="button"
             onClick={() => setIsPickerOpen((open) => !open)}
-            className="inline-flex items-center gap-1 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+            className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             aria-haspopup="dialog"
             aria-expanded={isPickerOpen}
           >
@@ -78,7 +78,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
 
           {isPickerOpen && (
             <div className="absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 min-w-[200px] rounded-xl bg-white p-4 text-[var(--color-text-primary)] shadow-lg ring-1 ring-black/5">
-              <div className="flex items-center justify-between border-b border-gray-100 pb-2 text-sm font-semibold mb-2">
+              <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-2 text-sm font-semibold">
                 <button
                   type="button"
                   onClick={() => setVisibleYear((year) => year - 1)}
@@ -126,10 +126,10 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
         <button
           type="button"
           onClick={() => onChangeMonth(1)}
-          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           aria-label="Next month"
         >
-          &gt;
+          <span>&gt;</span>
         </button>
       </div>
     </div>
