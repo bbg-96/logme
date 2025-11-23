@@ -29,7 +29,7 @@ export function CalendarDayCell({
     <button
       onClick={() => onSelect(date)}
       className={cx(
-        "group relative flex flex-col items-center justify-between rounded-xl border px-2 py-2 text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+        "group relative mx-auto flex h-11 w-11 flex-col items-center justify-center gap-0.5 rounded-xl border p-1 text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
         "bg-[var(--color-bg-subtle)] text-[var(--color-text-primary)] border border-[rgba(148,163,184,0.25)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]",
         "hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] hover:bg-[var(--color-bg-card)]",
         !inCurrentMonth && "opacity-60",
@@ -39,13 +39,13 @@ export function CalendarDayCell({
       )}
       aria-label={`View schedules for ${date.toDateString()}`}
     >
-      <div className="flex w-full flex-1 flex-col items-center gap-1 pb-1 pt-0.5">
+      <div className="flex flex-col items-center gap-0.5">
         <span
           className={cx(
-            "flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-semibold",
+            "flex h-5 w-5 items-center justify-center rounded-lg text-[11px] font-medium",
             isSelected
               ? "bg-indigo-600 text-white shadow-md"
-              : "bg-[var(--color-bg-card)] text-[var(--color-text-primary)]",
+              : "bg-white/80 text-[var(--color-text-primary)]",
             !inCurrentMonth && "text-[var(--color-text-muted)]",
           )}
         >
@@ -54,8 +54,9 @@ export function CalendarDayCell({
 
         <p
           className={cx(
-            "max-w-[92%] overflow-hidden text-ellipsis text-center text-[10px] leading-tight text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)]",
-            !previewTitle && "invisible",
+            "max-w-[92%] overflow-hidden text-ellipsis text-center text-[9px] leading-none text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)]",
+            "h-3",
+            !previewTitle && "opacity-0",
           )}
           aria-hidden={!previewTitle}
         >
@@ -63,7 +64,7 @@ export function CalendarDayCell({
         </p>
       </div>
 
-      <div className="mb-1 flex w-full items-center justify-center gap-1">
+      <div className="flex h-2 w-full items-center justify-center gap-1">
         {Array.from({ length: Math.min(schedulesCount, 3) }).map((_, index) => (
           <span
             key={index}
@@ -72,7 +73,7 @@ export function CalendarDayCell({
           />
         ))}
         {schedulesCount > 3 && (
-          <span className="rounded-full bg-indigo-100 px-1.5 py-[2px] text-[10px] font-semibold text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-100">
+          <span className="flex h-2 items-center rounded-full bg-indigo-100 px-1 text-[9px] font-semibold text-indigo-700 shadow-sm dark:bg-indigo-900/50 dark:text-indigo-100">
             · {schedulesCount}
           </span>
         )}
