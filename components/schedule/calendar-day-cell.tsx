@@ -63,12 +63,12 @@ export function CalendarDayCell({
         {Array.from({ length: Math.min(schedulesCount, 3) }).map((_, index) => (
           <span
             key={index}
-            className="h-2 w-2 rounded-full bg-indigo-500 shadow-[0_0_0_1px_var(--color-bg-card)]"
+            className="h-1.5 w-1.5 rounded-full bg-indigo-500 shadow-[0_0_0_1px_var(--color-bg-card)]"
             aria-hidden
           />
         ))}
         {schedulesCount > 3 && (
-          <span className="rounded-full bg-indigo-100 px-2 py-[2px] text-[10px] font-semibold text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-100">
+          <span className="rounded-full bg-indigo-100 px-2 py-[1px] text-[9px] font-semibold text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-100">
             · {schedulesCount}
           </span>
         )}
