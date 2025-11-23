@@ -129,11 +129,11 @@ export function ScheduleCalendar({
         )}
 
         <div
-          className={`space-y-3 md:space-y-0 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-start md:gap-3.5 ${
-            isFormOpen ? "md:max-h-[720px] md:overflow-y-auto md:pr-1" : ""
+          className={`space-y-3 lg:space-y-0 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-4 ${
+            isFormOpen ? "lg:max-h-[760px] lg:overflow-y-auto lg:pr-1" : ""
           }`}
         >
-          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3.5 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
+          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-4 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
             <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
               {weekdayLabels.map((day) => (
                 <span key={day} className="py-1">
@@ -143,7 +143,7 @@ export function ScheduleCalendar({
             </div>
 
             <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
-              <div className="grid grid-cols-7 gap-[4px] sm:gap-2 auto-rows-[minmax(68px,1fr)]">
+              <div className="grid grid-cols-7 gap-[4px] sm:gap-2 auto-rows-[minmax(82px,1fr)]">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
@@ -164,7 +164,7 @@ export function ScheduleCalendar({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm md:sticky md:top-2">
+          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm lg:sticky lg:top-0">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>

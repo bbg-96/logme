@@ -39,10 +39,10 @@ export function CalendarDayCell({
       )}
       aria-label={`View schedules for ${date.toDateString()}`}
     >
-      <div className="flex w-full flex-1 flex-col items-center justify-center gap-0.5 pb-1">
+      <div className="flex w-full flex-1 flex-col items-center justify-center gap-1 pb-1">
         <span
           className={cx(
-            "flex h-8 w-8 items-center justify-center rounded-full text-[15px] font-semibold",
+            "flex h-9 w-9 items-center justify-center rounded-full text-base font-semibold",
             isSelected
               ? "bg-indigo-600 text-white"
               : "bg-[var(--color-bg-card)] text-[var(--color-text-primary)]",

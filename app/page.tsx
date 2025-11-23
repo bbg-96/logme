@@ -95,12 +95,12 @@ export default function HomePage() {
   return (
     <main
       className={`mx-auto flex min-h-screen w-full max-w-[1080px] flex-col px-4 pb-16 sm:px-6 lg:px-8 ${
-        isSchedule ? "gap-3 pt-4" : "gap-6 pt-8"
+        isSchedule ? "gap-4 pt-5" : "gap-6 pt-8"
       }`}
     >
       <header
         className={`flex flex-col sm:flex-row sm:items-center sm:justify-between ${
-          isSchedule ? "gap-1.5" : "gap-4"
+          isSchedule ? "gap-2" : "gap-4"
         }`}
       >
         <Greeting compact={isSchedule} />
@@ -124,7 +124,7 @@ export default function HomePage() {
 
       <div
         className={`card-surface flex flex-wrap items-center justify-between ${
-          isSchedule ? "gap-1.5 px-3 py-1" : "gap-3 px-3 py-2"
+          isSchedule ? "gap-2 px-3 py-1.5" : "gap-3 px-3 py-2"
         }`}
       >
         <div className={`flex items-center ${isSchedule ? "gap-1.5" : "gap-2"}`}>
