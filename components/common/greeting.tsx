@@ -2,7 +2,11 @@
 
 import { useMemo } from "react";
 
-export function Greeting() {
+interface GreetingProps {
+  compact?: boolean;
+}
+
+export function Greeting({ compact = false }: GreetingProps) {
   const greeting = useMemo(() => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
@@ -20,9 +24,23 @@ export function Greeting() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-500">{dateLabel}</p>
-      <h1 className="text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl">
+    <div className={`flex flex-col ${compact ? "gap-1" : "gap-2"}`}>
+      <p
+        className={
+          compact
+            ? "text-[11px] font-semibold uppercase tracking-wide text-indigo-500"
+            : "text-sm font-semibold uppercase tracking-wide text-indigo-500"
+        }
+      >
+        {dateLabel}
+      </p>
+      <h1
+        className={
+          compact
+            ? "text-2xl font-bold leading-tight text-[var(--color-text-primary)] sm:text-3xl"
+            : "text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl"
+        }
+      >
         {greeting}, <span className="text-gradient">let’s get things done.</span>
       </h1>
     </div>

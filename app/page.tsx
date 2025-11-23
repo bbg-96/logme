@@ -90,20 +90,44 @@ export default function HomePage() {
       activeTab === tab ? "shadow-[0_10px_24px_var(--color-shadow-soft)]" : "hover:shadow-sm"
     }`;
 
+  const isSchedule = activeTab === "schedule";
+
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-[1080px] flex-col gap-6 px-4 pb-16 pt-8 sm:px-6 lg:px-8">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Greeting />
+    <main
+      className={`mx-auto flex min-h-screen w-full max-w-[1080px] flex-col px-4 pb-16 sm:px-6 lg:px-8 ${
+        isSchedule ? "gap-3 pt-4" : "gap-6 pt-8"
+      }`}
+    >
+      <header
+        className={`flex flex-col sm:flex-row sm:items-center sm:justify-between ${
+          isSchedule ? "gap-1.5" : "gap-4"
+        }`}
+      >
+        <Greeting compact={isSchedule} />
         <ThemeToggle />
       </header>
 
-      <section className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <SummaryCard label="Tasks" primary={stats.tasksRemaining} description="Incomplete" />
-        <SummaryCard label="Schedule" primary={stats.scheduleCount} description="Upcoming" />
+      <section className={`grid grid-cols-1 sm:grid-cols-2 ${isSchedule ? "gap-2.5" : "gap-3"}`}>
+        <SummaryCard
+          label="Tasks"
+          primary={stats.tasksRemaining}
+          description="Incomplete"
+          compact={isSchedule}
+        />
+        <SummaryCard
+          label="Schedule"
+          primary={stats.scheduleCount}
+          description="Upcoming"
+          compact={isSchedule}
+        />
       </section>
 
-      <div className="card-surface flex flex-wrap items-center justify-between gap-3 px-3 py-2">
-        <div className="flex items-center gap-2">
+      <div
+        className={`card-surface flex flex-wrap items-center justify-between ${
+          isSchedule ? "gap-1.5 px-3 py-1" : "gap-3 px-3 py-2"
+        }`}
+      >
+        <div className={`flex items-center ${isSchedule ? "gap-1.5" : "gap-2"}`}>
           <button onClick={() => handleTabChange("tasks")} className={tabClass("tasks")}>
             Tasks
           </button>
@@ -111,7 +135,11 @@ export default function HomePage() {
             Schedule
           </button>
         </div>
-        <p className="text-xs font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+        <p
+          className={`font-medium uppercase tracking-wide text-[var(--color-text-muted)] ${
+            isSchedule ? "text-[11px]" : "text-xs"
+          }`}
+        >
           {activeTab === "tasks" ? "Prioritize and complete" : "Plan your day"}
         </p>
       </div>
@@ -168,18 +196,38 @@ function SummaryCard({
   label,
   primary,
   description,
+  compact = false,
 }: {
   label: string;
   primary: number;
   description: string;
+  compact?: boolean;
 }) {
   return (
-    <div className="card-surface flex items-center justify-between p-3.5 shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+    <div
+      className={`card-surface flex items-center justify-between shadow-[0_8px_24px_rgba(15,23,42,0.06)] ${
+        compact ? "p-3" : "p-3.5"
+      }`}
+    >
       <div className="leading-tight">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{label}</p>
-        <p className="text-3xl font-bold text-[var(--color-text-primary)]">{primary}</p>
+        <p
+          className={
+            compact
+              ? "text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]"
+              : "text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]"
+          }
+        >
+          {label}
+        </p>
+        <p className={compact ? "text-2xl font-bold text-[var(--color-text-primary)]" : "text-3xl font-bold text-[var(--color-text-primary)]"}>
+          {primary}
+        </p>
       </div>
-      <span className="rounded-full bg-[var(--color-bg-subtle)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+      <span
+        className={`rounded-full bg-[var(--color-bg-subtle)] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] ${
+          compact ? "px-2.5 py-0.5 text-[10px]" : "px-3 py-1 text-[11px]"
+        }`}
+      >
         {description}
       </span>
     </div>

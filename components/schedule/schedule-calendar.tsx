@@ -86,15 +86,15 @@ export function ScheduleCalendar({
   const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="card-surface space-y-4 p-4">
-      <div className="flex flex-col gap-2.5 md:flex-row md:items-center md:justify-between">
+    <div className="card-surface space-y-3.5 p-3.5">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div className="space-y-0.5">
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Schedule</h2>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Monthly view</p>
         </div>
 
         <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end">
-          <div className="flex items-center gap-2 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-3 py-2 shadow-sm">
+          <div className="flex items-center gap-2 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-3 py-1.5 shadow-sm">
             <button
               onClick={() => changeMonth(-1)}
               className="rounded-full px-2 py-1 text-lg font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
@@ -128,8 +128,12 @@ export function ScheduleCalendar({
           <div className="lg:sticky lg:top-4">{formContent}</div>
         )}
 
-        <div className={`space-y-3 ${isFormOpen ? "lg:max-h-[760px] lg:overflow-y-auto lg:pr-1" : ""}`}>
-          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-4 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
+        <div
+          className={`space-y-3 md:space-y-0 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-start md:gap-3.5 ${
+            isFormOpen ? "md:max-h-[720px] md:overflow-y-auto md:pr-1" : ""
+          }`}
+        >
+          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3.5 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
             <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
               {weekdayLabels.map((day) => (
                 <span key={day} className="py-1">
@@ -139,7 +143,7 @@ export function ScheduleCalendar({
             </div>
 
             <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
-              <div className="grid grid-cols-7 gap-[6px] sm:gap-2">
+              <div className="grid grid-cols-7 gap-[4px] sm:gap-2 auto-rows-[minmax(68px,1fr)]">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
@@ -160,7 +164,7 @@ export function ScheduleCalendar({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm">
+          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm md:sticky md:top-2">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>
