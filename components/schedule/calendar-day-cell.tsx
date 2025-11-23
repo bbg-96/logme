@@ -59,7 +59,7 @@ export function CalendarDayCell({
         )}
       </div>
 
-      <div className="mb-2 flex w-full items-center justify-center gap-1.5">
+      <div className="mb-1.5 flex w-full items-center justify-center gap-1">
         {Array.from({ length: Math.min(schedulesCount, 3) }).map((_, index) => (
           <span
             key={index}

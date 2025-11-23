@@ -233,3 +233,11 @@ function SummaryCard({
     </div>
   );
 }
+
+function SummaryChip({ label, value }: { label: string; value: number }) {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-primary)] shadow-sm">
+      {label}: <span className="text-indigo-600">{value}</span>
+    </span>
+  );
+}
