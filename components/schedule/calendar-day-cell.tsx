@@ -52,11 +52,15 @@ export function CalendarDayCell({
           {dayNumber}
         </span>
 
-        {previewTitle && (
-          <p className="max-w-[92%] overflow-hidden text-ellipsis text-center text-[10px] leading-tight text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)]">
-            {previewTitle}
-          </p>
-        )}
+        <p
+          className={cx(
+            "max-w-[92%] overflow-hidden text-ellipsis text-center text-[10px] leading-tight text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)]",
+            !previewTitle && "invisible",
+          )}
+          aria-hidden={!previewTitle}
+        >
+          {previewTitle ?? "placeholder"}
+        </p>
       </div>
 
       <div className="mb-1.5 flex w-full items-center justify-center gap-1">
