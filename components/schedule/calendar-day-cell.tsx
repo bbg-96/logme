@@ -29,7 +29,7 @@ export function CalendarDayCell({
     <button
       onClick={() => onSelect(date)}
       className={cx(
-        "group relative flex aspect-[6/5] flex-col items-center justify-between rounded-xl border text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:aspect-square",
+        "group relative flex aspect-[7/5] flex-col items-center justify-between rounded-xl border text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
         "bg-[var(--color-bg-subtle)] text-[var(--color-text-primary)] border border-[rgba(148,163,184,0.25)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]",
         "hover:-translate-y-0.5 hover:shadow-[var(--color-shadow-soft)] hover:bg-[var(--color-bg-card)]",
         !inCurrentMonth && "opacity-60",
