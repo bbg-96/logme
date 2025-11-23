@@ -94,55 +94,40 @@ export default function HomePage() {
 
   return (
     <main
-      className={`mx-auto flex min-h-screen w-full max-w-[1120px] flex-col px-4 sm:px-6 lg:px-8 ${
-        isSchedule ? "gap-2 pt-2.5 pb-8" : "gap-6 pt-8 pb-16"
+      className={`mx-auto flex min-h-screen w-full max-w-[1080px] flex-col px-4 pb-16 sm:px-6 lg:px-8 ${
+        isSchedule ? "gap-4 pt-5" : "gap-6 pt-8"
       }`}
     >
       <header
         className={`flex flex-col sm:flex-row sm:items-center sm:justify-between ${
-          isSchedule ? "gap-1" : "gap-4"
+          isSchedule ? "gap-2" : "gap-4"
         }`}
       >
         <Greeting compact={isSchedule} />
         <ThemeToggle />
       </header>
 
-      <section
-        className={
-          isSchedule
-            ? "flex flex-wrap items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]"
-            : "grid grid-cols-1 gap-3 sm:grid-cols-2"
-        }
-      >
-        {isSchedule ? (
-          <>
-            <SummaryChip label="Tasks" value={stats.tasksRemaining} />
-            <SummaryChip label="Schedule" value={stats.scheduleCount} />
-          </>
-        ) : (
-          <>
-            <SummaryCard
-              label="Tasks"
-              primary={stats.tasksRemaining}
-              description="Incomplete"
-              compact={isSchedule}
-            />
-            <SummaryCard
-              label="Schedule"
-              primary={stats.scheduleCount}
-              description="Upcoming"
-              compact={isSchedule}
-            />
-          </>
-        )}
+      <section className={`grid grid-cols-1 sm:grid-cols-2 ${isSchedule ? "gap-2.5" : "gap-3"}`}>
+        <SummaryCard
+          label="Tasks"
+          primary={stats.tasksRemaining}
+          description="Incomplete"
+          compact={isSchedule}
+        />
+        <SummaryCard
+          label="Schedule"
+          primary={stats.scheduleCount}
+          description="Upcoming"
+          compact={isSchedule}
+        />
       </section>
 
       <div
         className={`card-surface flex flex-wrap items-center justify-between ${
-          isSchedule ? "gap-1 px-2.5 py-1" : "gap-3 px-3 py-2"
+          isSchedule ? "gap-2 px-3 py-1.5" : "gap-3 px-3 py-2"
         }`}
       >
-        <div className={`flex items-center ${isSchedule ? "gap-1" : "gap-2"}`}>
+        <div className={`flex items-center ${isSchedule ? "gap-1.5" : "gap-2"}`}>
           <button onClick={() => handleTabChange("tasks")} className={tabClass("tasks")}>
             Tasks
           </button>
@@ -152,7 +137,7 @@ export default function HomePage() {
         </div>
         <p
           className={`font-medium uppercase tracking-wide text-[var(--color-text-muted)] ${
-            isSchedule ? "text-[10px]" : "text-xs"
+            isSchedule ? "text-[11px]" : "text-xs"
           }`}
         >
           {activeTab === "tasks" ? "Prioritize and complete" : "Plan your day"}
@@ -251,7 +236,7 @@ function SummaryCard({
 
 function SummaryChip({ label, value }: { label: string; value: number }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-primary)] shadow-sm">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-primary)] shadow-sm">
       {label}: <span className="text-indigo-600">{value}</span>
     </span>
   );

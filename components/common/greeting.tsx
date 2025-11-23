@@ -37,7 +37,7 @@ export function Greeting({ compact = false }: GreetingProps) {
       <h1
         className={
           compact
-            ? "text-xl font-bold leading-tight text-[var(--color-text-primary)] sm:text-2xl"
+            ? "text-2xl font-bold leading-tight text-[var(--color-text-primary)] sm:text-3xl"
             : "text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl"
         }
       >

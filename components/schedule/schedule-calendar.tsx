@@ -86,26 +86,26 @@ export function ScheduleCalendar({
   const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="card-surface space-y-2.5 p-2.5">
-      <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+    <div className="card-surface space-y-3.5 p-3.5">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div className="space-y-0.5">
-          <h2 className="text-[15px] font-semibold leading-tight text-[var(--color-text-primary)]">Schedule</h2>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Monthly view</p>
+          <h2 className="text-base font-semibold text-[var(--color-text-primary)]">Schedule</h2>
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Monthly view</p>
         </div>
 
-        <div className="flex flex-col items-stretch gap-1 sm:flex-row sm:items-center sm:justify-end">
-          <div className="flex items-center gap-1 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-2 py-1.5 shadow-sm">
+        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end">
+          <div className="flex items-center gap-2 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-3 py-1.5 shadow-sm">
             <button
               onClick={() => changeMonth(-1)}
-              className="rounded-full px-2 py-1 text-sm font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+              className="rounded-full px-2 py-1 text-base font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               aria-label="Previous month"
             >
               &lt;
             </button>
-            <div className="min-w-[150px] text-center text-[13px] font-semibold text-[var(--color-text-primary)]">{monthLabel}</div>
+            <div className="min-w-[160px] text-center text-sm font-semibold text-[var(--color-text-primary)]">{monthLabel}</div>
             <button
               onClick={() => changeMonth(1)}
-              className="rounded-full px-2 py-1 text-sm font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+              className="rounded-full px-2 py-1 text-base font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
               aria-label="Next month"
             >
               &gt;
@@ -115,7 +115,7 @@ export function ScheduleCalendar({
           {onRequestCreate && (
             <button
               onClick={onRequestCreate}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-cyan-600 px-3 py-1.5 text-[13px] font-semibold text-white shadow-[0_8px_18px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-cyan-600 px-3.5 py-1.5 text-sm font-semibold text-white shadow-[0_8px_18px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
             >
               + New Schedule
             </button>
@@ -123,18 +123,18 @@ export function ScheduleCalendar({
         </div>
       </div>
 
-      <div className={isFormOpen ? "grid grid-cols-1 gap-2.5 lg:grid-cols-[320px_1fr]" : "space-y-2.5"}>
+      <div className={isFormOpen ? "grid grid-cols-1 gap-3 lg:grid-cols-[340px_1fr]" : "space-y-3"}>
         {isFormOpen && formContent && (
-          <div className="lg:sticky lg:top-2">{formContent}</div>
+          <div className="lg:sticky lg:top-3">{formContent}</div>
         )}
 
         <div
-          className={`space-y-2.5 md:space-y-0 md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:items-start md:gap-2.5${
-            isFormOpen ? "md:max-h-[620px] md:overflow-y-auto md:pr-1" : ""
+          className={`space-y-3 lg:space-y-0 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-4 ${
+            isFormOpen ? "lg:max-h-[760px] lg:overflow-y-auto lg:pr-1" : ""
           }`}
         >
-          <div className="space-y-2 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 shadow-[0_12px_30px_rgba(0,0,0,0.06)]">
-            <div className="grid grid-cols-7 text-center text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+          <div className="space-y-3 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-4 shadow-[0_14px_36px_rgba(0,0,0,0.06)]">
+            <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
               {weekdayLabels.map((day) => (
                 <span key={day} className="py-0.5">
                   {day}
@@ -142,8 +142,8 @@ export function ScheduleCalendar({
               ))}
             </div>
 
-            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[2px] sm:p-1.5">
-              <div className="grid grid-cols-7 gap-[2px] sm:gap-1.5 auto-rows-[minmax(48px,1fr)]">
+            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-2">
+              <div className="grid grid-cols-7 gap-[4px] sm:gap-2 auto-rows-[minmax(82px,1fr)]">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
@@ -164,11 +164,11 @@ export function ScheduleCalendar({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-2.5 shadow-sm md:sticky md:top-1">
+          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm lg:sticky lg:top-0">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>
-                <p className="text-[13px] font-semibold text-[var(--color-text-primary)]">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>
+                <p className="text-sm font-semibold text-[var(--color-text-primary)]">
                   {parseLocalDateString(selectedDate).toLocaleDateString(undefined, {
                     weekday: "short",
                     month: "long",
@@ -176,14 +176,14 @@ export function ScheduleCalendar({
                   })}
                 </p>
               </div>
-              <span className="rounded-full bg-[var(--color-bg-card)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] shadow-sm">
+              <span className="rounded-full bg-[var(--color-bg-card)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] shadow-sm">
                 {selectedDateItems.length} item{selectedDateItems.length === 1 ? "" : "s"}
               </span>
             </div>
 
             <div className="mt-1.5 space-y-1.5">
               {selectedDateItems.length === 0 && (
-                <div className="rounded-lg border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 text-[13px] text-[var(--color-text-muted)]">
+                <div className="rounded-lg border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 text-sm text-[var(--color-text-muted)]">
                   No schedule entries for this day.
                 </div>
               )}
@@ -191,21 +191,21 @@ export function ScheduleCalendar({
               {selectedDateItems.map((entry) => (
                 <article
                   key={entry.id}
-                  className="flex flex-col gap-1 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2 shadow-sm"
+                  className="flex flex-col gap-1 rounded-xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 shadow-sm"
                 >
                   <div className="flex items-start justify-between gap-2.5">
                     <div className="space-y-0.5">
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{entry.time}</p>
-                      <h3 className="text-[13px] font-semibold text-[var(--color-text-primary)]">{entry.title}</h3>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{entry.time}</p>
+                      <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">{entry.title}</h3>
                     </div>
                     <button
                       onClick={() => onDelete(entry.id)}
-                      className="self-start rounded-full border border-transparent bg-rose-50 px-2.5 py-0.5 text-[11px] font-semibold text-rose-600 shadow-sm transition hover:bg-rose-100 focus-visible:ring-2 focus-visible:ring-rose-500 dark:bg-rose-950/40 dark:text-rose-200"
+                      className="self-start rounded-full border border-transparent bg-rose-50 px-2.5 py-1 text-[11px] font-semibold text-rose-600 shadow-sm transition hover:bg-rose-100 focus-visible:ring-2 focus-visible:ring-rose-500 dark:bg-rose-950/40 dark:text-rose-200"
                     >
                       Delete
                     </button>
                   </div>
-                  {entry.notes && <p className="text-[12px] text-[var(--color-text-muted)]">{entry.notes}</p>}
+                  {entry.notes && <p className="text-[13px] text-[var(--color-text-muted)]">{entry.notes}</p>}
                 </article>
               ))}
             </div>
