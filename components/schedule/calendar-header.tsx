@@ -42,10 +42,11 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
 
   return (
     <div ref={containerRef} className="relative flex items-center justify-center">
-      <div className="inline-flex items-center justify-center gap-2">
+      <div className="inline-flex items-center justify-center gap-1">
         <button
+          type="button"
           onClick={() => onChangeMonth(-1)}
-          className="rounded-full px-2 py-1 text-sm text-[var(--color-text-primary)] transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
           aria-label="Previous month"
         >
           &lt;
@@ -123,8 +124,9 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
         </div>
 
         <button
+          type="button"
           onClick={() => onChangeMonth(1)}
-          className="rounded-full px-2 py-1 text-sm text-[var(--color-text-primary)] transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-gray-500 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
           aria-label="Next month"
         >
           &gt;
