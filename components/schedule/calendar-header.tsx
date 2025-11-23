@@ -41,24 +41,21 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
   );
 
   return (
-    <div
-      ref={containerRef}
-      className="relative flex items-center justify-between gap-2 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-3 py-2 shadow-sm"
-    >
-      <button
-        onClick={() => onChangeMonth(-1)}
-        className="rounded-full px-3 py-2 text-base font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-        aria-label="Previous month"
-      >
-        &lt;
-      </button>
+    <div ref={containerRef} className="relative flex items-center justify-end">
+      <div className="flex items-center justify-end gap-2 rounded-full border border-gray-200 bg-white/70 px-2 py-1 shadow-sm">
+        <button
+          onClick={() => onChangeMonth(-1)}
+          className="rounded-full px-3 py-2 text-sm font-semibold text-[var(--color-text-primary)] transition hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+          aria-label="Previous month"
+        >
+          &lt;
+        </button>
 
-      <div className="flex-1 text-center">
-        <div className="relative inline-flex">
+        <div className="relative">
           <button
             type="button"
             onClick={() => setIsPickerOpen((open) => !open)}
-            className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] shadow-sm transition hover:bg-[var(--color-bg-subtle)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] shadow-sm transition hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
             aria-haspopup="dialog"
             aria-expanded={isPickerOpen}
           >
@@ -79,8 +76,8 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
           </button>
 
           {isPickerOpen && (
-            <div className="absolute left-1/2 z-20 mt-2 w-64 -translate-x-1/2 rounded-xl bg-white text-[var(--color-text-primary)] shadow-xl ring-1 ring-black/5">
-              <div className="flex items-center justify-between border-b border-[color:var(--color-border-subtle)] px-3 py-2 text-sm font-semibold">
+            <div className="absolute right-0 z-20 mb-3 w-56 -translate-y-full rounded-xl bg-white text-[var(--color-text-primary)] shadow-xl ring-1 ring-black/5">
+              <div className="flex items-center justify-between border-b border-gray-100 px-3 py-2 text-sm font-semibold">
                 <button
                   type="button"
                   onClick={() => setVisibleYear((year) => year - 1)}
@@ -89,7 +86,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
                 >
                   &lt;
                 </button>
-                <span>{visibleYear}년</span>
+                <span className="py-1 font-semibold">{visibleYear}년</span>
                 <button
                   type="button"
                   onClick={() => setVisibleYear((year) => year + 1)}
@@ -101,32 +98,38 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
               </div>
 
               <div className="grid grid-cols-4 gap-2 p-3 text-sm">
-                {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
-                  <button
-                    key={month}
-                    type="button"
-                    className="w-full rounded-lg px-3 py-2 text-[var(--color-text-primary)] transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                    onClick={() => {
-                      onSelectMonth(visibleYear, month - 1);
-                      setIsPickerOpen(false);
-                    }}
-                  >
-                    {month}
-                  </button>
-                ))}
+                {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => {
+                  const isActive =
+                    visibleYear === currentMonth.getFullYear() && month - 1 === currentMonth.getMonth();
+                  return (
+                    <button
+                      key={month}
+                      type="button"
+                      className={`w-full rounded-lg px-2 py-1 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 ${
+                        isActive ? "bg-gray-900 text-white" : "text-[var(--color-text-primary)]"
+                      }`}
+                      onClick={() => {
+                        onSelectMonth(visibleYear, month - 1);
+                        setIsPickerOpen(false);
+                      }}
+                    >
+                      {month}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
         </div>
-      </div>
 
-      <button
-        onClick={() => onChangeMonth(1)}
-        className="rounded-full px-3 py-2 text-base font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-        aria-label="Next month"
-      >
-        &gt;
-      </button>
+        <button
+          onClick={() => onChangeMonth(1)}
+          className="rounded-full px-3 py-2 text-sm font-semibold text-[var(--color-text-primary)] transition hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+          aria-label="Next month"
+        >
+          &gt;
+        </button>
+      </div>
     </div>
   );
 }
