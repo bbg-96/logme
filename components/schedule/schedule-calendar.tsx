@@ -128,9 +128,15 @@ export function ScheduleCalendar({
           <div className="lg:sticky lg:top-4">{formContent}</div>
         )}
 
-        <div className={`space-y-3 ${isFormOpen ? "lg:max-h-[700px] lg:overflow-y-auto lg:pr-1" : ""}`}>
-          <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-4">
-            <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+        <div
+          className={`space-y-3 ${
+            isFormOpen
+              ? "lg:max-h-[700px] lg:overflow-y-auto lg:pr-1"
+              : "lg:grid lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-start lg:gap-4 lg:space-y-0"
+          }`}
+        >
+          <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-3 lg:p-4">
+            <div className="grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] sm:text-xs">
               {weekdayLabels.map((day) => (
                 <span key={day} className="py-1">
                   {day}
@@ -138,8 +144,8 @@ export function ScheduleCalendar({
               ))}
             </div>
 
-            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[4px] sm:p-1.5">
-              <div className="grid grid-cols-7 gap-[4px] sm:gap-1.5">
+            <div className="rounded-xl border border-[color:var(--color-border-subtle)]/70 bg-[color:var(--color-border-subtle)]/40 p-[3px] sm:p-1 lg:p-1.5">
+              <div className="grid grid-cols-7 gap-[3px] sm:gap-1 lg:gap-1.5">
                 {monthDays.map(({ date, inCurrentMonth }) => {
                   const key = toLocalDateString(date);
                   const daySchedules = schedulesByDate[key];
@@ -160,7 +166,7 @@ export function ScheduleCalendar({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm">
+          <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm lg:sticky lg:top-2">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>
