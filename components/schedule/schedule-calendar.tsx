@@ -3,6 +3,7 @@
 import { ReactNode, useMemo, useState } from "react";
 import { parseLocalDateString, toLocalDateString } from "@/lib/date";
 import { ScheduleItem } from "@/lib/types";
+import { CalendarHeader } from "./calendar-header";
 import { CalendarDayCell } from "./calendar-day-cell";
 
 interface Props {
@@ -45,31 +46,6 @@ export function ScheduleCalendar({
   const [currentMonth, setCurrentMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDate, setSelectedDate] = useState(todayKey);
 
-  const monthOptions = useMemo(
-    () => [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-    [],
-  );
-
-  const yearOptions = useMemo(() => {
-    const currentYear = today.getFullYear();
-    const minYear = Math.min(currentYear - 5, currentMonth.getFullYear());
-    const maxYear = Math.max(currentYear + 5, currentMonth.getFullYear());
-    return Array.from({ length: maxYear - minYear + 1 }, (_, index) => minYear + index);
-  }, [currentMonth, today]);
-
   const schedulesByDate = useMemo(() => {
     const grouped: Record<string, ScheduleItem[]> = {};
 
@@ -83,11 +59,6 @@ export function ScheduleCalendar({
 
   const monthDays = useMemo(() => buildCalendar(currentMonth), [currentMonth]);
   const selectedDateItems = schedulesByDate[selectedDate] ?? [];
-
-  const monthLabel = currentMonth.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-  });
 
   const synchronizeSelectedDate = (target: Date) => {
     setSelectedDate((existing) => {
@@ -107,14 +78,8 @@ export function ScheduleCalendar({
     });
   };
 
-  const changeMonthDirect = (month: number) => {
-    const next = new Date(currentMonth.getFullYear(), month, 1);
-    setCurrentMonth(next);
-    synchronizeSelectedDate(next);
-  };
-
-  const changeYearDirect = (year: number) => {
-    const next = new Date(year, currentMonth.getMonth(), 1);
+  const changeMonthDirectWithYear = (year: number, month: number) => {
+    const next = new Date(year, month, 1);
     setCurrentMonth(next);
     synchronizeSelectedDate(next);
   };
@@ -159,59 +124,7 @@ export function ScheduleCalendar({
           }`}
         >
           <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-3 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-3 lg:p-4">
-            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <label className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]" htmlFor="month-select">
-                  Month
-                </label>
-                <select
-                  id="month-select"
-                  value={currentMonth.getMonth()}
-                  onChange={(event) => changeMonthDirect(Number(event.target.value))}
-                  className="rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-3 py-1.5 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                >
-                  {monthOptions.map((label, index) => (
-                    <option key={label} value={index}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-
-                <label className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]" htmlFor="year-select">
-                  Year
-                </label>
-                <select
-                  id="year-select"
-                  value={currentMonth.getFullYear()}
-                  onChange={(event) => changeYearDirect(Number(event.target.value))}
-                  className="rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-3 py-1.5 text-sm font-semibold text-[var(--color-text-primary)] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                >
-                  {yearOptions.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-2 rounded-full border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] px-3 py-1.5 shadow-sm">
-                <button
-                  onClick={() => changeMonth(-1)}
-                  className="rounded-full px-2 py-1 text-lg font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                  aria-label="Previous month"
-                >
-                  &lt;
-                </button>
-                <div className="min-w-[160px] text-center text-sm font-semibold text-[var(--color-text-primary)]">{monthLabel}</div>
-                <button
-                  onClick={() => changeMonth(1)}
-                  className="rounded-full px-2 py-1 text-lg font-semibold text-[var(--color-text-primary)] transition hover:bg-[var(--color-bg-card)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                  aria-label="Next month"
-                >
-                  &gt;
-                </button>
-              </div>
-            </div>
+            <CalendarHeader currentMonth={currentMonth} onChangeMonth={changeMonth} onSelectMonth={changeMonthDirectWithYear} />
 
             <div className="grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] sm:text-xs">
               {weekdayLabels.map((day) => (
