@@ -2,15 +2,15 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type NullableString = string | null;
+type TimeValue = string;
 
 interface TimeFieldProps {
   label?: string;
-  value: NullableString;
-  onChange: (value: NullableString) => void;
+  value: TimeValue;
+  onChange: (value: TimeValue) => void;
 }
 
-function formatTimeDisplay(value: NullableString) {
+function formatTimeDisplay(value: TimeValue) {
   if (!value) return "Select time";
   const [hoursString, minutesString] = value.split(":");
   if (!hoursString || !minutesString) return value;

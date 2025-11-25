@@ -4,12 +4,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { parseLocalDateString, toLocalDateString } from "@/lib/date";
 
-type NullableString = string | null;
+type DateValue = string;
 
 interface DateFieldProps {
   label?: string;
-  value: NullableString;
-  onChange: (value: NullableString) => void;
+  value: DateValue;
+  onChange: (value: DateValue) => void;
   min?: string;
 }
 
@@ -19,7 +19,7 @@ function pad(value: number) {
   return value.toString().padStart(2, "0");
 }
 
-function formatDateDisplay(value: NullableString) {
+function formatDateDisplay(value: DateValue) {
   if (!value) return "Select date";
   const date = parseLocalDateString(value);
   if (Number.isNaN(date.getTime())) return value;
@@ -186,12 +186,21 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
                   onClick={() => setMonthOffset((current) => current - 1)}
                   aria-label="Previous month"
                 >
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M15 18l-6-6 6-6" />
                   </svg>
                 </button>
 
-                <span className="font-semibold">{visibleMonth.toLocaleDateString(undefined, { month: "long", year: "numeric" })}</span>
+                <span className="font-semibold">
+                  {visibleMonth.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+                </span>
 
                 <button
                   type="button"
@@ -199,7 +208,14 @@ export function DateField({ label, value, onChange, min }: DateFieldProps) {
                   onClick={() => setMonthOffset((current) => current + 1)}
                   aria-label="Next month"
                 >
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M9 6l6 6-6 6" />
                   </svg>
                 </button>
