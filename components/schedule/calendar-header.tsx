@@ -46,6 +46,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
   return (
     <div ref={containerRef} className="relative flex items-center justify-center">
       <div className="flex items-center justify-center gap-2">
+        {/* 이전 달 버튼 */}
         <button
           type="button"
           onClick={() => onChangeMonth(-1)}
@@ -55,6 +56,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
           <ChevronLeft className="h-4 w-4" />
         </button>
 
+        {/* 월 선택 버튼 + 팝오버 */}
         <div className="relative">
           <button
             type="button"
@@ -72,6 +74,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
 
           {isPickerOpen && (
             <div className="absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 min-w-[200px] rounded-xl bg-white p-4 text-[var(--color-text-primary)] shadow-lg ring-1 ring-black/5">
+              {/* 연도 선택 영역 */}
               <div className="mb-2 flex items-center justify-between border-b border-gray-100 pb-2 text-sm font-semibold">
                 <button
                   type="button"
@@ -92,10 +95,12 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
                 </button>
               </div>
 
+              {/* 월 선택 그리드 */}
               <div className="grid grid-cols-4 gap-2 pt-3 text-sm">
                 {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => {
                   const isActive =
                     visibleYear === currentMonth.getFullYear() && month - 1 === currentMonth.getMonth();
+
                   return (
                     <button
                       key={month}
@@ -117,6 +122,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
           )}
         </div>
 
+        {/* 다음 달 버튼 */}
         <button
           type="button"
           onClick={() => onChangeMonth(1)}

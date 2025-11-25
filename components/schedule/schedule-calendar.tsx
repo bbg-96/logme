@@ -43,27 +43,39 @@ export function ScheduleCalendar({
 }: Props) {
   const today = useMemo(() => new Date(), []);
   const todayKey = useMemo(() => toLocalDateString(today), [today]);
-  const [currentMonth, setCurrentMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
+  const [currentMonth, setCurrentMonth] = useState(
+    () => new Date(today.getFullYear(), today.getMonth(), 1),
+  );
   const [selectedDate, setSelectedDate] = useState(todayKey);
 
   const schedulesByDate = useMemo(() => {
     const grouped: Record<string, ScheduleItem[]> = {};
 
     schedules.forEach((entry) => {
-      grouped[entry.date] = grouped[entry.date] ? [...grouped[entry.date], entry] : [entry];
+      grouped[entry.date] = grouped[entry.date]
+        ? [...grouped[entry.date], entry]
+        : [entry];
     });
 
-    Object.values(grouped).forEach((items) => items.sort((a, b) => a.time.localeCompare(b.time)));
+    Object.values(grouped).forEach((items) =>
+      items.sort((a, b) => a.time.localeCompare(b.time)),
+    );
     return grouped;
   }, [schedules]);
 
-  const monthDays = useMemo(() => buildCalendar(currentMonth), [currentMonth]);
+  const monthDays = useMemo(
+    () => buildCalendar(currentMonth),
+    [currentMonth],
+  );
   const selectedDateItems = schedulesByDate[selectedDate] ?? [];
 
   const synchronizeSelectedDate = (target: Date) => {
     setSelectedDate((existing) => {
       const parsed = parseLocalDateString(existing);
-      if (parsed.getFullYear() === target.getFullYear() && parsed.getMonth() === target.getMonth()) {
+      if (
+        parsed.getFullYear() === target.getFullYear() &&
+        parsed.getMonth() === target.getMonth()
+      ) {
         return existing;
       }
       return toLocalDateString(target);
@@ -72,7 +84,11 @@ export function ScheduleCalendar({
 
   const changeMonth = (offset: number) => {
     setCurrentMonth((previous) => {
-      const next = new Date(previous.getFullYear(), previous.getMonth() + offset, 1);
+      const next = new Date(
+        previous.getFullYear(),
+        previous.getMonth() + offset,
+        1,
+      );
       synchronizeSelectedDate(next);
       return next;
     });
@@ -93,25 +109,13 @@ export function ScheduleCalendar({
 
   return (
     <div className="card-surface space-y-2.5 p-2.5 sm:space-y-3.5 sm:p-3.5">
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-0.5">
-          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Schedule</h2>
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Monthly view</p>
-        </div>
+      {/* 상단 제목/서브텍스트 제거됨 */}
 
-        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end">
-          {onRequestCreate && (
-            <button
-              onClick={onRequestCreate}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
-            >
-              + New Schedule
-            </button>
-          )}
-        </div>
-      </div>
-
-      <div className={isFormOpen ? "grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]" : "space-y-2.5"}>
+      <div
+        className={
+          isFormOpen ? "grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]" : "space-y-2.5"
+        }
+      >
         {isFormOpen && formContent && (
           <div className="lg:sticky lg:top-4">{formContent}</div>
         )}
@@ -123,8 +127,25 @@ export function ScheduleCalendar({
               : "lg:grid lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-start lg:gap-4 lg:space-y-0"
           }`}
         >
+          {/* 캘린더 카드 */}
           <div className="space-y-2.5 rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-card)] p-2.5 shadow-[0_14px_36px_rgba(0,0,0,0.06)] sm:p-2.5 lg:p-3.5">
-            <CalendarHeader currentMonth={currentMonth} onChangeMonth={changeMonth} onSelectMonth={changeMonthDirectWithYear} />
+            {/* 여기로 CalendarHeader + New Schedule 이동 */}
+            <div className="flex items-center justify-between gap-2">
+              <CalendarHeader
+                currentMonth={currentMonth}
+                onChangeMonth={changeMonth}
+                onSelectMonth={changeMonthDirectWithYear}
+              />
+
+              {onRequestCreate && (
+                <button
+                  onClick={onRequestCreate}
+                  className="hidden sm:inline-flex items-center justify-center gap-2 rounded-full bg-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
+                >
+                  + New Schedule
+                </button>
+              )}
+            </div>
 
             <div className="grid grid-cols-7 text-center text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] sm:text-xs">
               {weekdayLabels.map((day) => (
@@ -155,20 +176,27 @@ export function ScheduleCalendar({
             </div>
           </div>
 
+          {/* Day details 패널은 그대로 유지 */}
           <div className="rounded-2xl border border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-3 shadow-sm lg:sticky lg:top-2">
             <div className="flex items-start justify-between gap-2">
               <div className="space-y-0.5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">Day details</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+                  Day details
+                </p>
                 <p className="text-base font-semibold text-[var(--color-text-primary)]">
-                  {parseLocalDateString(selectedDate).toLocaleDateString(undefined, {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  {parseLocalDateString(selectedDate).toLocaleDateString(
+                    undefined,
+                    {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                    },
+                  )}
                 </p>
               </div>
               <span className="rounded-full bg-[var(--color-bg-card)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)] shadow-sm">
-                {selectedDateItems.length} item{selectedDateItems.length === 1 ? "" : "s"}
+                {selectedDateItems.length} item
+                {selectedDateItems.length === 1 ? "" : "s"}
               </span>
             </div>
 
@@ -186,8 +214,12 @@ export function ScheduleCalendar({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-0.5">
-                      <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">{entry.time}</p>
-                      <h3 className="text-base font-semibold text-[var(--color-text-primary)]">{entry.title}</h3>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+                        {entry.time}
+                      </p>
+                      <h3 className="text-base font-semibold text-[var(--color-text-primary)]">
+                        {entry.title}
+                      </h3>
                     </div>
                     <button
                       onClick={() => onDelete(entry.id)}
@@ -196,7 +228,11 @@ export function ScheduleCalendar({
                       Delete
                     </button>
                   </div>
-                  {entry.notes && <p className="text-sm text-[var(--color-text-muted)]">{entry.notes}</p>}
+                  {entry.notes && (
+                    <p className="text-sm text-[var(--color-text-muted)]">
+                      {entry.notes}
+                    </p>
+                  )}
                 </article>
               ))}
             </div>

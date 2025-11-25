@@ -10,6 +10,15 @@ const priorityRank: Record<Priority, number> = {
   low: 3,
 };
 
+// 정렬 옵션 타입 확장
+type SortOption =
+  | "priorityHighFirst"
+  | "priorityLowFirst"
+  | "dueDateAsc"
+  | "dueDateDesc"
+  | "createdAsc"
+  | "createdDesc";
+
 interface Props {
   tasks: Task[];
   onToggleComplete: (id: string) => void;
@@ -27,8 +36,10 @@ export function TaskList({
   isFormOpen,
   formContent,
 }: Props) {
-  const [sortBy, setSortBy] = useState<"priority" | "dueDate" | "createdAt">("priority");
-  const [filter, setFilter] = useState<"all" | "high" | "today" | "incomplete">("all");
+  const [sortBy, setSortBy] = useState<SortOption>("priorityHighFirst");
+  const [filter, setFilter] = useState<"all" | "high" | "today" | "incomplete">(
+    "all",
+  );
 
   const today = toLocalDateString(new Date());
 
@@ -49,33 +60,58 @@ export function TaskList({
     });
 
     return list.sort((a, b) => {
-      if (sortBy === "priority") {
-        return priorityRank[a.priority] - priorityRank[b.priority];
+      switch (sortBy) {
+        case "priorityHighFirst":
+          // 높은 우선순위 먼저 (high → medium → low)
+          return priorityRank[a.priority] - priorityRank[b.priority];
+        case "priorityLowFirst":
+          // 낮은 우선순위 먼저 (low → medium → high)
+          return priorityRank[b.priority] - priorityRank[a.priority];
+        case "dueDateAsc":
+          // 마감일 빠른 순
+          return a.dueDate.localeCompare(b.dueDate);
+        case "dueDateDesc":
+          // 마감일 늦은 순
+          return b.dueDate.localeCompare(a.dueDate);
+        case "createdAsc": {
+          // 생성일 오래된 것부터
+          const aCreated = normalizeCreatedAt(a.createdAt);
+          const bCreated = normalizeCreatedAt(b.createdAt);
+          return aCreated - bCreated;
+        }
+        case "createdDesc": {
+          // 생성일 최신 것부터
+          const aCreated = normalizeCreatedAt(a.createdAt);
+          const bCreated = normalizeCreatedAt(b.createdAt);
+          return bCreated - aCreated;
+        }
+        default:
+          return 0;
       }
-      if (sortBy === "dueDate") return a.dueDate.localeCompare(b.dueDate);
-      return normalizeCreatedAt(a.createdAt) - normalizeCreatedAt(b.createdAt);
     });
   }, [filter, normalizeCreatedAt, sortBy, tasks, today]);
 
   const filterTabClass = (key: string) =>
-    `tab-button ${filter === key ? "is-active shadow-[0_10px_24px_var(--color-shadow-soft)]" : "hover:shadow-sm"}`;
+    `tab-button ${
+      filter === key
+        ? "is-active shadow-[0_10px_24px_var(--color-shadow-soft)]"
+        : "hover:shadow-sm"
+    }`;
 
   return (
     <div className="card-surface space-y-3.5 p-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Tasks</h2>
-        {onRequestCreate && (
-          <button
-            onClick={onRequestCreate}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(99,102,241,0.25)] transition hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-          >
-            + New Task
-          </button>
-        )}
-      </div>
-
+      {/* Header: New Task + filters on the left, sort dropdown on the right */}
       <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-2">
+          {onRequestCreate && (
+            <button
+              onClick={onRequestCreate}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(99,102,241,0.25)] transition hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+            >
+              + New Task
+            </button>
+          )}
+
           {[
             { key: "all", label: "All" },
             { key: "high", label: "High" },
@@ -95,15 +131,27 @@ export function TaskList({
         <div className="relative">
           <select
             value={sortBy}
-            onChange={(event) => setSortBy(event.target.value as typeof sortBy)}
+            onChange={(event) =>
+              setSortBy(event.target.value as SortOption)
+            }
             className="appearance-none rounded-full border border-gray-200 bg-white px-3 py-1.5 pr-8 text-sm font-medium text-gray-600 shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             aria-label="Sort tasks by"
           >
-            <option value="priority">Priority</option>
-            <option value="dueDate">Due date</option>
-            <option value="createdAt">Created</option>
+            {/* Priority */}
+            <option value="priorityHighFirst">Priority: High → Low</option>
+            <option value="priorityLowFirst">Priority: Low → High</option>
+
+            {/* Due date */}
+            <option value="dueDateAsc">Due date: Soon → Late</option>
+            <option value="dueDateDesc">Due date: Late → Soon</option>
+
+            {/* Created */}
+            <option value="createdAsc">Created: Oldest → Newest</option>
+            <option value="createdDesc">Created: Newest → Oldest</option>
           </select>
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">▾</span>
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+            ▾
+          </span>
         </div>
       </div>
 
@@ -113,7 +161,11 @@ export function TaskList({
         </div>
       )}
 
-      <div className={`grid grid-cols-1 gap-2.5 ${isFormOpen ? "max-h-[560px] overflow-y-auto pr-1" : ""}`}>
+      <div
+        className={`grid grid-cols-1 gap-2.5 ${
+          isFormOpen ? "max-h-[560px] overflow-y-auto pr-1" : ""
+        }`}
+      >
         {filteredTasks.length === 0 && (
           <div className="rounded-xl border border-dashed border-[color:var(--color-border-subtle)] bg-[var(--color-bg-subtle)] p-6 text-center text-sm text-[var(--color-text-muted)]">
             No tasks found for this view.
@@ -138,7 +190,9 @@ export function TaskList({
                   <label
                     htmlFor={`task-${task.id}`}
                     className={`text-base font-semibold ${
-                      task.completed ? "text-[var(--color-text-muted)] line-through" : "text-[var(--color-text-primary)]"
+                      task.completed
+                        ? "text-[var(--color-text-muted)] line-through"
+                        : "text-[var(--color-text-primary)]"
                     }`}
                   >
                     {task.title}
@@ -146,9 +200,15 @@ export function TaskList({
                   <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-text-muted)]">
                     <PriorityBadge priority={task.priority} />
                     <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-bg-subtle)] px-2 py-1">
-                      Due {parseLocalDateString(task.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      Due{" "}
+                      {parseLocalDateString(task.dueDate).toLocaleDateString(
+                        undefined,
+                        { month: "short", day: "numeric" },
+                      )}
                     </span>
-                    {task.completed && <span className="text-emerald-500">Completed</span>}
+                    {task.completed && (
+                      <span className="text-emerald-500">Completed</span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -164,7 +224,9 @@ export function TaskList({
             </div>
 
             {task.notes && (
-              <p className="rounded-xl bg-[var(--color-bg-subtle)] px-3 py-2 text-sm text-[var(--color-text-primary)]">{task.notes}</p>
+              <p className="rounded-xl bg-[var(--color-bg-subtle)] px-3 py-2 text-sm text-[var(--color-text-primary)]">
+                {task.notes}
+              </p>
             )}
           </article>
         ))}
@@ -180,7 +242,9 @@ function PriorityBadge({ priority }: { priority: Priority }) {
     low: "badge-low",
   };
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${classes[priority]}`}>
+    <span
+      className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold shadow-sm ${classes[priority]}`}
+    >
       {priority === "high" && "⬆"}
       {priority === "medium" && "⬅"}
       {priority === "low" && "⬇"}
