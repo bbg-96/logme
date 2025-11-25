@@ -29,6 +29,7 @@ export function ScheduleForm({ onCreate, onClose }: Props) {
     if (!title.trim()) return;
     onCreate({ title: title.trim(), date, time, notes: notes.trim() });
     reset();
+    onClose?.();
   };
 
   return (
