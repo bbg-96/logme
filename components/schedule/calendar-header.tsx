@@ -51,7 +51,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
           type="button"
           onClick={() => onChangeMonth(-1)}
           aria-label="Previous month"
-          className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-gray-300 dark:hover:bg-white/10"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-gray-300 dark:hover:bg-white/5"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -79,7 +79,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
                 <button
                   type="button"
                   onClick={() => setVisibleYear((year) => year - 1)}
-                  className="rounded-full px-3 py-1 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 dark:text-[color:var(--color-text-primary)] dark:hover:bg-white/10 dark:focus-visible:outline-indigo-400"
+                  className="rounded-full px-3 py-1 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 dark:text-[color:var(--color-text-primary)] dark:hover:bg-white/5 dark:focus-visible:outline-indigo-400"
                   aria-label="Previous year"
                 >
                   &lt;
@@ -88,7 +88,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
                 <button
                   type="button"
                   onClick={() => setVisibleYear((year) => year + 1)}
-                  className="rounded-full px-3 py-1 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 dark:text-[color:var(--color-text-primary)] dark:hover:bg-white/10 dark:focus-visible:outline-indigo-400"
+                  className="rounded-full px-3 py-1 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 dark:text-[color:var(--color-text-primary)] dark:hover:bg-white/5 dark:focus-visible:outline-indigo-400"
                   aria-label="Next year"
                 >
                   &gt;
@@ -129,7 +129,7 @@ export function CalendarHeader({ currentMonth, onChangeMonth, onSelectMonth }: C
           type="button"
           onClick={() => onChangeMonth(1)}
           aria-label="Next month"
-          className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-gray-300 dark:hover:bg-white/10"
+          className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-gray-300 dark:hover:bg-white/5"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
